@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeshBench — what arrived at the antenna, and why</title>
+<meta name="description" content="An RF-accurate MeshCore network simulator. Real firmware, a sample-accurate LoRa channel, real terrain, and a channel that decides nothing.">
+<link rel="icon" href="brand/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B0A12">
+<meta property="og:title" content="MeshBench">
+<meta property="og:description" content="An RF-accurate MeshCore network simulator: real firmware against a sample-accurate LoRa channel over real terrain.">
+<meta property="og:image" content="brand/card.png">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="MeshBench"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324.6 49.2" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="MeshBench"><g transform="translate(-6.25,-11.31) scale(1.3300)">
+  <path d="M 9.50 34.50 L 18.00 43.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 18.00 43.00 L 32.00 30.50" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 18.00 43.00 L 20.50 23.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 20.50 23.00 L 29.50 11.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 29.50 11.00 L 40.50 19.50" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 32.00 30.50 L 39.00 40.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 40.50 19.50 L 39.00 40.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 9.50 34.50 L 29.50 11.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 9.50 34.50 L 20.50 23.00" stroke="currentColor" stroke-width="3.2"/>
+  <path d="M 20.50 23.00 L 32.00 30.50" stroke="currentColor" stroke-width="3.2"/>
+  <path d="M 32.00 30.50 L 40.50 19.50" stroke="currentColor" stroke-width="3.2"/>
+  <circle cx="18.00" cy="43.00" r="2.50" fill="currentColor" opacity="0.4"/>
+  <circle cx="29.50" cy="11.00" r="2.50" fill="currentColor" opacity="0.4"/>
+  <circle cx="39.00" cy="40.00" r="2.50" fill="currentColor" opacity="0.4"/>
+  <circle cx="20.50" cy="23.00" r="3.80" fill="currentColor"/>
+  <circle cx="32.00" cy="30.50" r="3.80" fill="currentColor"/>
+  <circle cx="9.50" cy="34.50" r="4.80" fill="currentColor"/>
+  <circle cx="40.50" cy="19.50" r="4.80" fill="currentColor"/>
+</g><g transform="translate(70.0,40.7)" fill="currentColor"><path d="M3.04 0V-32.2H14.31L19.87 -4.14H20.7L26.27 -32.2H37.54V0H31.65V-27.74H30.82L25.3 0H15.27L9.75 -27.74H8.92V0Z M53.36 0.64Q49.96 0.64 47.36 -0.8Q44.76 -2.25 43.31 -4.9Q41.86 -7.54 41.86 -11.13V-11.68Q41.86 -15.27 43.29 -17.92Q44.71 -20.56 47.29 -22.01Q49.86 -23.46 53.27 -23.46Q56.63 -23.46 59.11 -21.96Q61.59 -20.47 62.97 -17.82Q64.35 -15.18 64.35 -11.68V-9.71H47.75Q47.84 -7.36 49.5 -5.89Q51.15 -4.42 53.54 -4.42Q55.98 -4.42 57.13 -5.47Q58.28 -6.53 58.88 -7.82L63.62 -5.34Q62.97 -4.14 61.76 -2.74Q60.54 -1.33 58.51 -0.35Q56.49 0.64 53.36 0.64ZM47.79 -14.03H58.47Q58.28 -16.01 56.88 -17.2Q55.48 -18.4 53.22 -18.4Q50.88 -18.4 49.5 -17.2Q48.12 -16.01 47.79 -14.03Z M78.15 0.64Q73.69 0.64 70.84 -1.29Q67.99 -3.22 67.39 -6.81L72.73 -8.19Q73.05 -6.58 73.81 -5.66Q74.57 -4.74 75.69 -4.35Q76.82 -3.96 78.15 -3.96Q80.18 -3.96 81.14 -4.67Q82.11 -5.38 82.11 -6.44Q82.11 -7.5 81.19 -8.07Q80.27 -8.65 78.25 -9.02L76.96 -9.25Q74.57 -9.71 72.59 -10.51Q70.61 -11.32 69.41 -12.74Q68.22 -14.17 68.22 -16.42Q68.22 -19.83 70.7 -21.64Q73.19 -23.46 77.23 -23.46Q81.05 -23.46 83.58 -21.76Q86.11 -20.06 86.89 -17.3L81.51 -15.64Q81.14 -17.39 80.02 -18.12Q78.89 -18.86 77.23 -18.86Q75.58 -18.86 74.7 -18.29Q73.83 -17.71 73.83 -16.7Q73.83 -15.59 74.75 -15.06Q75.67 -14.54 77.23 -14.26L78.52 -14.03Q81.1 -13.57 83.19 -12.81Q85.28 -12.05 86.5 -10.65Q87.72 -9.25 87.72 -6.85Q87.72 -3.27 85.12 -1.31Q82.52 0.64 78.15 0.64Z M91.95 0V-32.2H97.75V-20.01H98.58Q98.95 -20.75 99.73 -21.48Q100.51 -22.22 101.82 -22.7Q103.13 -23.18 105.16 -23.18Q107.82 -23.18 109.82 -21.96Q111.83 -20.75 112.93 -18.61Q114.03 -16.47 114.03 -13.62V0H108.24V-13.16Q108.24 -15.73 106.97 -17.02Q105.71 -18.31 103.36 -18.31Q100.69 -18.31 99.22 -16.54Q97.75 -14.77 97.75 -11.59V0Z M118.36 0V-5.34H122.59V-26.86H118.36V-32.2H134.92Q137.86 -32.2 140.05 -31.21Q142.23 -30.22 143.45 -28.41Q144.67 -26.59 144.67 -24.06V-23.6Q144.67 -21.39 143.84 -19.99Q143.01 -18.58 141.89 -17.82Q140.76 -17.07 139.75 -16.74V-15.92Q140.76 -15.64 141.96 -14.88Q143.15 -14.12 144 -12.7Q144.85 -11.27 144.85 -8.97V-8.51Q144.85 -5.84 143.61 -3.93Q142.37 -2.02 140.19 -1.01Q138 0 135.1 0ZM128.66 -5.52H134.37Q136.34 -5.52 137.56 -6.49Q138.78 -7.45 138.78 -9.25V-9.71Q138.78 -11.5 137.59 -12.47Q136.39 -13.43 134.37 -13.43H128.66ZM128.66 -18.95H134.27Q136.16 -18.95 137.38 -19.92Q138.6 -20.88 138.6 -22.59V-23.05Q138.6 -24.79 137.4 -25.74Q136.21 -26.68 134.27 -26.68H128.66Z M159.57 0.64Q156.17 0.64 153.57 -0.8Q150.97 -2.25 149.52 -4.9Q148.07 -7.54 148.07 -11.13V-11.68Q148.07 -15.27 149.5 -17.92Q150.93 -20.56 153.5 -22.01Q156.08 -23.46 159.48 -23.46Q162.84 -23.46 165.32 -21.96Q167.81 -20.47 169.19 -17.82Q170.57 -15.18 170.57 -11.68V-9.71H153.96Q154.05 -7.36 155.71 -5.89Q157.37 -4.42 159.76 -4.42Q162.2 -4.42 163.35 -5.47Q164.5 -6.53 165.09 -7.82L169.83 -5.34Q169.19 -4.14 167.97 -2.74Q166.75 -1.33 164.73 -0.35Q162.7 0.64 159.57 0.64ZM154.01 -14.03H164.68Q164.5 -16.01 163.09 -17.2Q161.69 -18.4 159.44 -18.4Q157.09 -18.4 155.71 -17.2Q154.33 -16.01 154.01 -14.03Z M174.89 0V-22.82H180.6V-19.83H181.42Q181.98 -21.02 183.49 -22.1Q185.01 -23.18 188.09 -23.18Q190.76 -23.18 192.76 -21.96Q194.76 -20.75 195.87 -18.61Q196.97 -16.47 196.97 -13.62V0H191.18V-13.16Q191.18 -15.73 189.91 -17.02Q188.65 -18.31 186.3 -18.31Q183.63 -18.31 182.16 -16.54Q180.69 -14.77 180.69 -11.59V0Z M213.12 0.64Q209.81 0.64 207.12 -0.74Q204.42 -2.12 202.86 -4.74Q201.3 -7.36 201.3 -11.09V-11.73Q201.3 -15.46 202.86 -18.08Q204.42 -20.7 207.12 -22.08Q209.81 -23.46 213.12 -23.46Q216.38 -23.46 218.73 -22.31Q221.08 -21.16 222.53 -19.16Q223.97 -17.16 224.43 -14.63L218.82 -13.43Q218.64 -14.81 217.99 -15.92Q217.35 -17.02 216.18 -17.66Q215 -18.31 213.26 -18.31Q211.51 -18.31 210.11 -17.55Q208.7 -16.79 207.9 -15.29Q207.09 -13.8 207.09 -11.64V-11.18Q207.09 -9.02 207.9 -7.52Q208.7 -6.03 210.11 -5.27Q211.51 -4.51 213.26 -4.51Q215.88 -4.51 217.24 -5.87Q218.59 -7.22 218.96 -9.43L224.57 -8.1Q223.97 -5.66 222.53 -3.66Q221.08 -1.66 218.73 -0.51Q216.38 0.64 213.12 0.64Z M228.53 0V-32.2H234.32V-20.01H235.15Q235.52 -20.75 236.3 -21.48Q237.08 -22.22 238.39 -22.7Q239.71 -23.18 241.73 -23.18Q244.4 -23.18 246.4 -21.96Q248.4 -20.75 249.5 -18.61Q250.61 -16.47 250.61 -13.62V0H244.81V-13.16Q244.81 -15.73 243.55 -17.02Q242.28 -18.31 239.94 -18.31Q237.27 -18.31 235.8 -16.54Q234.32 -14.77 234.32 -11.59V0Z"/></g></svg></a>
+    <nav>
+      <a href="#uses">What it is for</a>
+      <a href="#physics">The physics</a>
+      <a href="#boards">Boards</a>
+      <a href="#limits">Limits</a>
+      <a class="btn btn-primary" href="https://github.com/MeshBench/meshbench/releases/latest">Download</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="ghost" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="MeshBench">
+  <path d="M 24.00 13.80 L 25.81 14.81 L 24.00 15.76 L 22.19 14.81 Z" fill="#a494db" stroke="#a494db" stroke-width="0.45"/>
+  <path d="M 22.19 14.81 L 24.00 15.76 L 22.19 16.56 L 20.38 15.78 Z" fill="#ab9be2" stroke="#ab9be2" stroke-width="0.45"/>
+  <path d="M 25.81 14.81 L 27.62 15.79 L 25.81 16.58 L 24.00 15.76 Z" fill="#aa9ae1" stroke="#aa9ae1" stroke-width="0.45"/>
+  <path d="M 20.38 15.78 L 22.19 16.56 L 20.38 17.19 L 18.57 16.71 Z" fill="#b4a3ea" stroke="#b4a3ea" stroke-width="0.45"/>
+  <path d="M 24.00 15.76 L 25.81 16.58 L 24.00 17.00 L 22.19 16.56 Z" fill="#b7a7ee" stroke="#b7a7ee" stroke-width="0.45"/>
+  <path d="M 27.62 15.79 L 29.43 16.74 L 27.62 17.26 L 25.81 16.58 Z" fill="#b2a1e8" stroke="#b2a1e8" stroke-width="0.45"/>
+  <path d="M 18.57 16.71 L 20.38 17.19 L 18.57 17.78 L 16.76 17.61 Z" fill="#bbaaf1" stroke="#bbaaf1" stroke-width="0.45"/>
+  <path d="M 22.19 16.56 L 24.00 17.00 L 22.19 16.99 L 20.38 17.19 Z" fill="#c3b3fa" stroke="#c3b3fa" stroke-width="0.45"/>
+  <path d="M 25.81 16.58 L 27.62 17.26 L 25.81 17.08 L 24.00 17.00 Z" fill="#c1b1f8" stroke="#c1b1f8" stroke-width="0.45"/>
+  <path d="M 29.43 16.74 L 31.24 17.68 L 29.43 17.93 L 27.62 17.26 Z" fill="#b6a5ec" stroke="#b6a5ec" stroke-width="0.45"/>
+  <path d="M 16.76 17.61 L 18.57 17.78 L 16.76 18.53 L 14.95 18.57 Z" fill="#bcabf2" stroke="#bcabf2" stroke-width="0.45"/>
+  <path d="M 20.38 17.19 L 22.19 16.99 L 20.38 16.85 L 18.57 17.78 Z" fill="#c7b6fd" stroke="#c7b6fd" stroke-width="0.45"/>
+  <path d="M 24.00 17.00 L 25.81 17.08 L 24.00 16.06 L 22.19 16.99 Z" fill="#c8b7fe" stroke="#c8b7fe" stroke-width="0.45"/>
+  <path d="M 27.62 17.26 L 29.43 17.93 L 27.62 17.13 L 25.81 17.08 Z" fill="#c1b1f8" stroke="#c1b1f8" stroke-width="0.45"/>
+  <path d="M 31.24 17.68 L 33.05 18.67 L 31.24 18.80 L 29.43 17.93 Z" fill="#b4a4eb" stroke="#b4a4eb" stroke-width="0.45"/>
+  <path d="M 14.95 18.57 L 16.76 18.53 L 14.95 19.48 L 13.14 19.57 Z" fill="#baaaf1" stroke="#baaaf1" stroke-width="0.45"/>
+  <path d="M 18.57 17.78 L 20.38 16.85 L 18.57 17.19 L 16.76 18.53 Z" fill="#c1b1f8" stroke="#c1b1f8" stroke-width="0.45"/>
+  <path d="M 22.19 16.99 L 24.00 16.06 L 22.19 14.78 L 20.38 16.85 Z" fill="#c6b5fc" stroke="#c6b5fc" stroke-width="0.45"/>
+  <path d="M 25.81 17.08 L 27.62 17.13 L 25.81 15.05 L 24.00 16.06 Z" fill="#c2b1f8" stroke="#c2b1f8" stroke-width="0.45"/>
+  <path d="M 29.43 17.93 L 31.24 18.80 L 29.43 17.70 L 27.62 17.13 Z" fill="#b8a7ee" stroke="#b8a7ee" stroke-width="0.45"/>
+  <path d="M 33.05 18.67 L 34.86 19.76 L 33.05 19.99 L 31.24 18.80 Z" fill="#ad9de4" stroke="#ad9de4" stroke-width="0.45"/>
+  <path d="M 13.14 19.57 L 14.95 19.48 L 13.14 20.12 L 11.32 20.45 Z" fill="#c0aff6" stroke="#c0aff6" stroke-width="0.45"/>
+  <path d="M 24.00 16.06 L 25.81 15.05 L 24.00 12.58 L 22.19 14.78 Z" fill="#c2b1f8" stroke="#c2b1f8" stroke-width="0.45"/>
+  <path d="M 34.86 19.76 L 36.68 20.91 L 34.86 21.40 L 33.05 19.99 Z" fill="#a696dd" stroke="#a696dd" stroke-width="0.45"/>
+  <path d="M 20.38 16.85 L 22.19 14.78 L 20.38 14.46 L 18.57 17.19 Z" fill="#beadf4" stroke="#beadf4" stroke-width="0.45"/>
+  <path d="M 27.62 17.13 L 29.43 17.70 L 27.62 15.13 L 25.81 15.05 Z" fill="#b3a3ea" stroke="#b3a3ea" stroke-width="0.45"/>
+  <path d="M 16.76 18.53 L 18.57 17.19 L 16.76 18.23 L 14.95 19.48 Z" fill="#b9a9f0" stroke="#b9a9f0" stroke-width="0.45"/>
+  <path d="M 31.24 18.80 L 33.05 19.99 L 31.24 19.12 L 29.43 17.70 Z" fill="#a999e0" stroke="#a999e0" stroke-width="0.45"/>
+  <path d="M 11.32 20.45 L 13.14 20.12 L 11.32 20.46 L 9.51 21.20 Z" fill="#c3b3fa" stroke="#c3b3fa" stroke-width="0.45"/>
+  <path d="M 14.95 19.48 L 16.76 18.23 L 14.95 19.26 L 13.14 20.12 Z" fill="#bdadf4" stroke="#bdadf4" stroke-width="0.45"/>
+  <path d="M 22.19 14.78 L 24.00 12.58 L 22.19 11.59 L 20.38 14.46 Z" fill="#c1b0f7" stroke="#c1b0f7" stroke-width="0.45"/>
+  <path d="M 25.81 15.05 L 27.62 15.13 L 25.81 12.10 L 24.00 12.58 Z" fill="#b6a5ec" stroke="#b6a5ec" stroke-width="0.45"/>
+  <path d="M 33.05 19.99 L 34.86 21.40 L 33.05 21.13 L 31.24 19.12 Z" fill="#9c8cd3" stroke="#9c8cd3" stroke-width="0.45"/>
+  <path d="M 36.68 20.91 L 38.49 22.06 L 36.68 22.81 L 34.86 21.40 Z" fill="#a192d8" stroke="#a192d8" stroke-width="0.45"/>
+  <path d="M 18.57 17.19 L 20.38 14.46 L 18.57 15.87 L 16.76 18.23 Z" fill="#af9fe6" stroke="#af9fe6" stroke-width="0.45"/>
+  <path d="M 29.43 17.70 L 31.24 19.12 L 29.43 16.95 L 27.62 15.13 Z" fill="#9b8bd2" stroke="#9b8bd2" stroke-width="0.45"/>
+  <path d="M 16.76 18.23 L 18.57 15.87 L 16.76 18.30 L 14.95 19.26 Z" fill="#a898df" stroke="#a898df" stroke-width="0.45"/>
+  <path d="M 31.24 19.12 L 33.05 21.13 L 31.24 19.98 L 29.43 16.95 Z" fill="#8475bb" stroke="#8475bb" stroke-width="0.45"/>
+  <path d="M 9.51 21.20 L 11.32 20.46 L 9.51 21.79 L 7.70 22.33 Z" fill="#b6a5ec" stroke="#b6a5ec" stroke-width="0.45"/>
+  <path d="M 13.14 20.12 L 14.95 19.26 L 13.14 19.95 L 11.32 20.46 Z" fill="#c4b3fa" stroke="#c4b3fa" stroke-width="0.45"/>
+  <path d="M 20.38 14.46 L 22.19 11.59 L 20.38 13.40 L 18.57 15.87 Z" fill="#a898df" stroke="#a898df" stroke-width="0.45"/>
+  <path d="M 24.00 12.58 L 25.81 12.10 L 24.00 10.79 L 22.19 11.59 Z" fill="#c6b5fc" stroke="#c6b5fc" stroke-width="0.45"/>
+  <path d="M 27.62 15.13 L 29.43 16.95 L 27.62 14.36 L 25.81 12.10 Z" fill="#9081c8" stroke="#9081c8" stroke-width="0.45"/>
+  <path d="M 34.86 21.40 L 36.68 22.81 L 34.86 23.17 L 33.05 21.13 Z" fill="#9788ce" stroke="#9788ce" stroke-width="0.45"/>
+  <path d="M 38.49 22.06 L 40.30 23.17 L 38.49 24.10 L 36.68 22.81 Z" fill="#a090d7" stroke="#a090d7" stroke-width="0.45"/>
+  <path d="M 18.57 15.87 L 20.38 13.40 L 18.57 17.34 L 16.76 18.30 Z" fill="#8374ba" stroke="#8374ba" stroke-width="0.45"/>
+  <path d="M 29.43 16.95 L 31.24 19.98 L 29.43 18.54 L 27.62 14.36 Z" fill="#6759a0" stroke="#6759a0" stroke-width="0.45"/>
+  <path d="M 14.95 19.26 L 16.76 18.30 L 14.95 20.69 L 13.14 19.95 Z" fill="#aa9ae0" stroke="#aa9ae0" stroke-width="0.45"/>
+  <path d="M 33.05 21.13 L 34.86 23.17 L 33.05 23.06 L 31.24 19.98 Z" fill="#7c6db4" stroke="#7c6db4" stroke-width="0.45"/>
+  <path d="M 7.70 22.33 L 9.51 21.79 L 7.70 24.14 L 5.89 23.84 Z" fill="#9c8cd3" stroke="#9c8cd3" stroke-width="0.45"/>
+  <path d="M 11.32 20.46 L 13.14 19.95 L 11.32 21.77 L 9.51 21.79 Z" fill="#aa9ae1" stroke="#aa9ae1" stroke-width="0.45"/>
+  <path d="M 22.19 11.59 L 24.00 10.79 L 22.19 12.77 L 20.38 13.40 Z" fill="#a292d9" stroke="#a292d9" stroke-width="0.45"/>
+  <path d="M 25.81 12.10 L 27.62 14.36 L 25.81 13.31 L 24.00 10.79 Z" fill="#8677bd" stroke="#8677bd" stroke-width="0.45"/>
+  <path d="M 36.68 22.81 L 38.49 24.10 L 36.68 24.87 L 34.86 23.17 Z" fill="#9a8ad1" stroke="#9a8ad1" stroke-width="0.45"/>
+  <path d="M 40.30 23.17 L 42.11 24.25 L 40.30 25.26 L 38.49 24.10 Z" fill="#a090d6" stroke="#a090d6" stroke-width="0.45"/>
+  <path d="M 16.76 18.30 L 18.57 17.34 L 16.76 21.58 L 14.95 20.69 Z" fill="#6759a0" stroke="#6759a0" stroke-width="0.45"/>
+  <path d="M 20.38 13.40 L 22.19 12.77 L 20.38 17.36 L 18.57 17.34 Z" fill="#52448b" stroke="#52448b" stroke-width="0.45"/>
+  <path d="M 27.62 14.36 L 29.43 18.54 L 27.62 18.13 L 25.81 13.31 Z" fill="#3f3278" stroke="#3f3278" stroke-width="0.45"/>
+  <path d="M 31.24 19.98 L 33.05 23.06 L 31.24 22.80 L 29.43 18.54 Z" fill="#594b91" stroke="#594b91" stroke-width="0.45"/>
+  <path d="M 13.14 19.95 L 14.95 20.69 L 13.14 23.32 L 11.32 21.77 Z" fill="#6f60a7" stroke="#6f60a7" stroke-width="0.45"/>
+  <path d="M 34.86 23.17 L 36.68 24.87 L 34.86 25.45 L 33.05 23.06 Z" fill="#8677be" stroke="#8677be" stroke-width="0.45"/>
+  <path d="M 5.89 23.84 L 7.70 24.14 L 5.89 26.08 L 4.08 25.21 Z" fill="#9989d0" stroke="#9989d0" stroke-width="0.45"/>
+  <path d="M 9.51 21.79 L 11.32 21.77 L 9.51 24.72 L 7.70 24.14 Z" fill="#7869b0" stroke="#7869b0" stroke-width="0.45"/>
+  <path d="M 24.00 10.79 L 25.81 13.31 L 24.00 15.17 L 22.19 12.77 Z" fill="#44377d" stroke="#44377d" stroke-width="0.45"/>
+  <path d="M 38.49 24.10 L 40.30 25.26 L 38.49 26.22 L 36.68 24.87 Z" fill="#9d8dd4" stroke="#9d8dd4" stroke-width="0.45"/>
+  <path d="M 42.11 24.25 L 43.92 25.31 L 42.11 26.34 L 40.30 25.26 Z" fill="#a090d7" stroke="#a090d7" stroke-width="0.45"/>
+  <path d="M 14.95 20.69 L 16.76 21.58 L 14.95 25.06 L 13.14 23.32 Z" fill="#4a3d83" stroke="#4a3d83" stroke-width="0.45"/>
+  <path d="M 18.57 17.34 L 20.38 17.36 L 18.57 22.40 L 16.76 21.58 Z" fill="#382b71" stroke="#382b71" stroke-width="0.45"/>
+  <path d="M 22.19 12.77 L 24.00 15.17 L 22.19 19.31 L 20.38 17.36 Z" fill="#2c2066" stroke="#2c2066" stroke-width="0.45"/>
+  <path d="M 25.81 13.31 L 27.62 18.13 L 25.81 19.58 L 24.00 15.17 Z" fill="#2c2066" stroke="#2c2066" stroke-width="0.45"/>
+  <path d="M 29.43 18.54 L 31.24 22.80 L 29.43 23.04 L 27.62 18.13 Z" fill="#2f2268" stroke="#2f2268" stroke-width="0.45"/>
+  <path d="M 33.05 23.06 L 34.86 25.45 L 33.05 25.97 L 31.24 22.80 Z" fill="#685aa0" stroke="#685aa0" stroke-width="0.45"/>
+  <path d="M 11.32 21.77 L 13.14 23.32 L 11.32 26.12 L 9.51 24.72 Z" fill="#4b3d83" stroke="#4b3d83" stroke-width="0.45"/>
+  <path d="M 36.68 24.87 L 38.49 26.22 L 36.68 27.12 L 34.86 25.45 Z" fill="#9585cc" stroke="#9585cc" stroke-width="0.45"/>
+  <path d="M 7.70 24.14 L 9.51 24.72 L 7.70 27.02 L 5.89 26.08 Z" fill="#8072b8" stroke="#8072b8" stroke-width="0.45"/>
+  <path d="M 40.30 25.26 L 42.11 26.34 L 40.30 27.37 L 38.49 26.22 Z" fill="#9f8fd6" stroke="#9f8fd6" stroke-width="0.45"/>
+  <path d="M 24.00 15.17 L 25.81 19.58 L 24.00 22.30 L 22.19 19.31 Z" fill="#2c2066" stroke="#2c2066" stroke-width="0.45"/>
+  <path d="M 13.14 23.32 L 14.95 25.06 L 13.14 27.60 L 11.32 26.12 Z" fill="#4d3f86" stroke="#4d3f86" stroke-width="0.45"/>
+  <path d="M 16.76 21.58 L 18.57 22.40 L 16.76 26.29 L 14.95 25.06 Z" fill="#403379" stroke="#403379" stroke-width="0.45"/>
+  <path d="M 20.38 17.36 L 22.19 19.31 L 20.38 23.85 L 18.57 22.40 Z" fill="#2c2066" stroke="#2c2066" stroke-width="0.45"/>
+  <path d="M 27.62 18.13 L 29.43 23.04 L 27.62 23.94 L 25.81 19.58 Z" fill="#2c2066" stroke="#2c2066" stroke-width="0.45"/>
+  <path d="M 31.24 22.80 L 33.05 25.97 L 31.24 26.63 L 29.43 23.04 Z" fill="#4a3d83" stroke="#4a3d83" stroke-width="0.45"/>
+  <path d="M 34.86 25.45 L 36.68 27.12 L 34.86 28.00 L 33.05 25.97 Z" fill="#8677be" stroke="#8677be" stroke-width="0.45"/>
+  <path d="M 9.51 24.72 L 11.32 26.12 L 9.51 28.14 L 7.70 27.02 Z" fill="#6d5fa6" stroke="#6d5fa6" stroke-width="0.45"/>
+  <path d="M 38.49 26.22 L 40.30 27.37 L 38.49 28.38 L 36.68 27.12 Z" fill="#9d8dd4" stroke="#9d8dd4" stroke-width="0.45"/>
+  <path d="M 22.19 19.31 L 24.00 22.30 L 22.19 25.28 L 20.38 23.85 Z" fill="#2c2066" stroke="#2c2066" stroke-width="0.45"/>
+  <path d="M 25.81 19.58 L 27.62 23.94 L 25.81 24.80 L 24.00 22.30 Z" fill="#2c2066" stroke="#2c2066" stroke-width="0.45"/>
+  <path d="M 11.32 26.12 L 13.14 27.60 L 11.32 29.29 L 9.51 28.14 Z" fill="#7769af" stroke="#7769af" stroke-width="0.45"/>
+  <path d="M 14.95 25.06 L 16.76 26.29 L 14.95 28.78 L 13.14 27.60 Z" fill="#61539a" stroke="#61539a" stroke-width="0.45"/>
+  <path d="M 18.57 22.40 L 20.38 23.85 L 18.57 27.46 L 16.76 26.29 Z" fill="#34276e" stroke="#34276e" stroke-width="0.45"/>
+  <path d="M 29.43 23.04 L 31.24 26.63 L 29.43 27.25 L 27.62 23.94 Z" fill="#3f3279" stroke="#3f3279" stroke-width="0.45"/>
+  <path d="M 33.05 25.97 L 34.86 28.00 L 33.05 28.91 L 31.24 26.63 Z" fill="#7567ad" stroke="#7567ad" stroke-width="0.45"/>
+  <path d="M 36.68 27.12 L 38.49 28.38 L 36.68 29.39 L 34.86 28.00 Z" fill="#9888cf" stroke="#9888cf" stroke-width="0.45"/>
+  <path d="M 20.38 23.85 L 22.19 25.28 L 20.38 28.26 L 18.57 27.46 Z" fill="#493c82" stroke="#493c82" stroke-width="0.45"/>
+  <path d="M 24.00 22.30 L 25.81 24.80 L 24.00 25.78 L 22.19 25.28 Z" fill="#6b5da3" stroke="#6b5da3" stroke-width="0.45"/>
+  <path d="M 27.62 23.94 L 29.43 27.25 L 27.62 27.09 L 25.81 24.80 Z" fill="#63559b" stroke="#63559b" stroke-width="0.45"/>
+  <path d="M 13.14 27.60 L 14.95 28.78 L 13.14 30.36 L 11.32 29.29 Z" fill="#8879bf" stroke="#8879bf" stroke-width="0.45"/>
+  <path d="M 16.76 26.29 L 18.57 27.46 L 16.76 29.87 L 14.95 28.78 Z" fill="#67589f" stroke="#67589f" stroke-width="0.45"/>
+  <path d="M 31.24 26.63 L 33.05 28.91 L 31.24 29.66 L 29.43 27.25 Z" fill="#6f61a7" stroke="#6f61a7" stroke-width="0.45"/>
+  <path d="M 34.86 28.00 L 36.68 29.39 L 34.86 30.40 L 33.05 28.91 Z" fill="#9383ca" stroke="#9383ca" stroke-width="0.45"/>
+  <path d="M 18.57 27.46 L 20.38 28.26 L 18.57 30.77 L 16.76 29.87 Z" fill="#7061a8" stroke="#7061a8" stroke-width="0.45"/>
+  <path d="M 22.19 25.28 L 24.00 25.78 L 22.19 28.26 L 20.38 28.26 Z" fill="#7567ad" stroke="#7567ad" stroke-width="0.45"/>
+  <path d="M 25.81 24.80 L 27.62 27.09 L 25.81 26.97 L 24.00 25.78 Z" fill="#9181c8" stroke="#9181c8" stroke-width="0.45"/>
+  <path d="M 29.43 27.25 L 31.24 29.66 L 29.43 29.85 L 27.62 27.09 Z" fill="#7264aa" stroke="#7264aa" stroke-width="0.45"/>
+  <path d="M 14.95 28.78 L 16.76 29.87 L 14.95 31.42 L 13.14 30.36 Z" fill="#8d7dc4" stroke="#8d7dc4" stroke-width="0.45"/>
+  <path d="M 33.05 28.91 L 34.86 30.40 L 33.05 31.36 L 31.24 29.66 Z" fill="#8e7fc6" stroke="#8e7fc6" stroke-width="0.45"/>
+  <path d="M 16.76 29.87 L 18.57 30.77 L 16.76 32.45 L 14.95 31.42 Z" fill="#8e7fc6" stroke="#8e7fc6" stroke-width="0.45"/>
+  <path d="M 20.38 28.26 L 22.19 28.26 L 20.38 31.35 L 18.57 30.77 Z" fill="#7263aa" stroke="#7263aa" stroke-width="0.45"/>
+  <path d="M 24.00 25.78 L 25.81 26.97 L 24.00 29.05 L 22.19 28.26 Z" fill="#7264aa" stroke="#7264aa" stroke-width="0.45"/>
+  <path d="M 27.62 27.09 L 29.43 29.85 L 27.62 30.05 L 25.81 26.97 Z" fill="#64569c" stroke="#64569c" stroke-width="0.45"/>
+  <path d="M 31.24 29.66 L 33.05 31.36 L 31.24 32.15 L 29.43 29.85 Z" fill="#8475bb" stroke="#8475bb" stroke-width="0.45"/>
+  <path d="M 18.57 30.77 L 20.38 31.35 L 18.57 33.42 L 16.76 32.45 Z" fill="#8a7bc2" stroke="#8a7bc2" stroke-width="0.45"/>
+  <path d="M 22.19 28.26 L 24.00 29.05 L 22.19 32.26 L 20.38 31.35 Z" fill="#56488f" stroke="#56488f" stroke-width="0.45"/>
+  <path d="M 25.81 26.97 L 27.62 30.05 L 25.81 31.61 L 24.00 29.05 Z" fill="#382c72" stroke="#382c72" stroke-width="0.45"/>
+  <path d="M 29.43 29.85 L 31.24 32.15 L 29.43 32.94 L 27.62 30.05 Z" fill="#685aa1" stroke="#685aa1" stroke-width="0.45"/>
+  <path d="M 20.38 31.35 L 22.19 32.26 L 20.38 34.44 L 18.57 33.42 Z" fill="#796bb1" stroke="#796bb1" stroke-width="0.45"/>
+  <path d="M 24.00 29.05 L 25.81 31.61 L 24.00 33.90 L 22.19 32.26 Z" fill="#362a70" stroke="#362a70" stroke-width="0.45"/>
+  <path d="M 27.62 30.05 L 29.43 32.94 L 27.62 34.13 L 25.81 31.61 Z" fill="#4b3e84" stroke="#4b3e84" stroke-width="0.45"/>
+  <path d="M 22.19 32.26 L 24.00 33.90 L 22.19 35.61 L 20.38 34.44 Z" fill="#7162a9" stroke="#7162a9" stroke-width="0.45"/>
+  <path d="M 25.81 31.61 L 27.62 34.13 L 25.81 35.53 L 24.00 33.90 Z" fill="#574990" stroke="#574990" stroke-width="0.45"/>
+  <path d="M 24.00 33.90 L 25.81 35.53 L 24.00 36.76 L 22.19 35.61 Z" fill="#8374bb" stroke="#8374bb" stroke-width="0.45"/>
+  <path d="M 4.08 25.21 L 5.89 26.08 L 7.70 27.02 L 9.51 28.14 L 11.32 29.29 L 13.14 30.36 L 14.95 31.42 L 16.76 32.45 L 18.57 33.42 L 20.38 34.44 L 22.19 35.61 L 24.00 36.76 L 24.00 40.26 L 4.08 28.76 Z" fill="#33257A" stroke="#33257A" stroke-width="0.4"/>
+  <path d="M 24.00 36.76 L 25.81 35.53 L 27.62 34.13 L 29.43 32.94 L 31.24 32.15 L 33.05 31.36 L 34.86 30.40 L 36.68 29.39 L 38.49 28.38 L 40.30 27.37 L 42.11 26.34 L 43.92 25.31 L 43.92 28.76 L 24.00 40.26 Z" fill="#1E1553" stroke="#1E1553" stroke-width="0.4"/>
+</svg></div>
+  <div class="wrap">
+    <div class="eyebrow">MeshCore, on a bench</div>
+    <h1>What arrived at the antenna, and why</h1>
+    <p class="lede">MeshBench runs <strong>real MeshCore firmware</strong> against a
+      <strong>sample-accurate LoRa baseband channel</strong> over real terrain. Not a packet
+      model with extra steps — a channel that sums waveforms, adds noise, and leaves the
+      deciding to each receiver's demodulator.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/MeshBench/meshbench/releases/latest">Download for Linux, macOS, Windows</a>
+      <a class="btn btn-ghost" href="https://github.com/MeshBench/meshbench-docs">Read the documentation</a>
+    </div>
+    <p class="note">One binary. No service to deploy, no account, nothing to configure before the first run.</p>
+  </div>
+</div>
+
+<section id="uses">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow">Three questions</div>
+      <h2>One binary, and the three people who open it</h2>
+      <p>They arrive with different questions, and the tool answers all three against the same physics.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <div class="kicker">Plan a network</div>
+        <h3>Where the next node should go</h3>
+        <p>Coverage rasterised over real terrain and searched for the best site. Both link margins
+        for any pair — <em>both</em>, because reachability is asymmetric — and the terrain
+        cut-through that explains them. Import a live network from CoreScope, Beacon or MQTT and
+        ask what it would do.</p>
+      </div>
+      <div class="card">
+        <div class="kicker">Develop firmware</div>
+        <h3>Did my branch relay more, or less?</h3>
+        <p>MeshCore's own code, not a reimplementation: routing, flood suppression, duty-cycle
+        policing and CSMA timing are the real thing. Point <code>meshbench dev</code> at a
+        checkout, run half the mesh on one build and half on another, same traffic, and diff.</p>
+      </div>
+      <div class="card">
+        <div class="kicker">Build an application</div>
+        <h3>How does my app cope with a bad link?</h3>
+        <p><code>meshbench serve</code> exposes a node over TCP, a serial pty or Bluetooth —
+        the real companion protocol, spoken by real firmware. Your app cannot tell it from a radio
+        on a desk, and you can put forty nodes and a hill between it and the far end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="physics">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow">Why the physics matters</div>
+      <h2>The channel decides nothing</h2>
+      <p>Most mesh simulators answer <em>did the packet arrive</em> from a link-budget rule. That
+      tells you nothing about the case that actually matters: a marginal link, two nodes
+      transmitting at once, a hill in the way.</p>
+    </div>
+    <div class="grid g2">
+      <div class="pull">
+        <b>It sums waveforms and adds noise.</b>
+        <p>Path loss over real terrain, thermal noise, and then every receiver's demodulator finds
+        out for itself. Capture effect, partial collisions and sensitivity are <em>emergent</em> —
+        nobody wrote them down as rules, which is why the failure you are chasing can happen here
+        at all.</p>
+      </div>
+      <div class="card">
+        <div class="kicker">The receive chain, in full</div>
+        <div class="chain">
+          <span class="hot">dechirp</span><span>Gray</span><span>diagonal deinterleave</span>
+          <span>Hamming FEC</span><span>dewhiten</span><span>header CRC</span>
+          <span class="hot">payload CRC</span>
+        </div>
+        <p style="margin-top:14px">Airtime matches the firmware's own <code>getEstAirtimeFor()</code>.
+        Its CSMA timing is built on that number, and a channel that disagrees desynchronises
+        silently.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="what">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow">What you get</div>
+      <h2>Every answer, with its working shown</h2>
+    </div>
+    <div class="feats">
+      <div class="feat"><b>Why a link missed</b><span>Terrain cut-through with the Fresnel zone and each diffracting edge's own loss, in both directions.</span></div>
+      <div class="feat"><b>What the air looked like</b><span>Waterfall, IQ, and a dechirped symbol view showing which of two colliding frames captured.</span></div>
+      <div class="feat"><b>Coverage and planning</b><span>Link budgets rasterised over terrain, combined across a fleet, and searched for the next site.</span></div>
+      <div class="feat"><b>Real boards</b><span>Published <code>.uf2</code> and <code>.bin</code> images under QEMU and Renode, with a matrix of what has been watched happening.</span></div>
+      <div class="feat"><b>Firmware A/B</b><span>Half the repeaters on one build, half on another, same traffic, and diff.</span></div>
+      <div class="feat"><b>Your app against a mesh</b><span>A real companion over TCP, a serial pty, or Bluetooth.</span></div>
+      <div class="feat"><b>Repeatable tests</b><span><code>meshbench test</code> runs a fixture on real firmware and checks its assertions, for your CI or MeshCore's.</span></div>
+      <div class="feat"><b>Wireshark and SDR</b><span>Every receiver's view of every frame over loopback UDP or as pcapng; IQ exported or streamed so an unmodified SDR client sees the band.</span></div>
+      <div class="feat"><b>Batteries and solar</b><span>Whether a node survives the winter where you want to put it.</span></div>
+      <div class="feat"><b>Determinism</b><span>Same seed, same scenario, same answer — counter-based RNG, never a stateful stream shared across goroutines.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="boards">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow">Boards</div>
+      <h2>Measured, not claimed</h2>
+      <p>Published board images, run under an emulator, and watched. Every row is a measurement —
+      never a claim about the hardware. A blank means nobody has watched that board do that thing.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Board</th><th>MCU</th><th>Emulator</th><th>How far it got</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Generic_E22_sx1262</td><td>ESP32</td><td>QEMU</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Heltec_t114</td><td>nRF52840</td><td>Renode</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Heltec_t096</td><td>nRF52840</td><td>Renode</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Heltec_v3</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
+          <tr><td class="mono">Xiao_S3_WIO</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
+          <tr><td class="mono">RAK_4631</td><td>nRF52840</td><td>Renode</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
+          <tr><td class="mono">Xiao_nrf52</td><td>nRF52840</td><td>Renode</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
+          <tr><td class="mono">Heltec_mesh_solar</td><td>nRF52840</td><td>Renode</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
+          <tr><td class="mono">Station_G2</td><td>ESP32-S3</td><td>—</td><td><span class="pill none">no emulation wiring recorded yet</span></td></tr>
+          <tr><td class="mono">Heltec_v2</td><td>ESP32</td><td>—</td><td><span class="pill none">carries an SX1276, which is not modelled</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="legend">The boards that do not forward report their channel busy for essentially the
+    whole run — 241 seconds of 250 on one measurement, against zero on a board that relays — and
+    MeshCore will not transmit into a busy channel. Not the wiring, not the budget, not the seed,
+    not the geometry.</p>
+  </div>
+</section>
+
+<section id="limits" class="honesty">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow">Honesty about the model</div>
+      <h2>The simulator is kinder than the air</h2>
+      <p>No multipath, no oscillator error, no body loss, bare-earth terrain unless you load
+      buildings, and an ESP32's Wi-Fi and Bluetooth stubbed rather than simulated.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Treat every result as a best case</h3>
+        <p>Nearly every known bias points the same way, which is what makes the tool usable:
+        <strong>if it says a link will not work, believe it; if it says a link will work
+        marginally, go and measure.</strong></p>
+      </div>
+      <div class="card">
+        <h3>And it is not buried</h3>
+        <p>It is stated in the interface, on every result, and <em>What it does not do</em> is a
+        long, specific and maintained account of what the model omits, what it gets measurably
+        wrong, and in which direction — including the parts never checked against real air.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="col about">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324.6 49.2" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="MeshBench"><g transform="translate(-6.25,-11.31) scale(1.3300)">
+  <path d="M 9.50 34.50 L 18.00 43.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 18.00 43.00 L 32.00 30.50" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 18.00 43.00 L 20.50 23.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 20.50 23.00 L 29.50 11.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 29.50 11.00 L 40.50 19.50" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 32.00 30.50 L 39.00 40.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 40.50 19.50 L 39.00 40.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 9.50 34.50 L 29.50 11.00" stroke="currentColor" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 9.50 34.50 L 20.50 23.00" stroke="currentColor" stroke-width="3.2"/>
+  <path d="M 20.50 23.00 L 32.00 30.50" stroke="currentColor" stroke-width="3.2"/>
+  <path d="M 32.00 30.50 L 40.50 19.50" stroke="currentColor" stroke-width="3.2"/>
+  <circle cx="18.00" cy="43.00" r="2.50" fill="currentColor" opacity="0.4"/>
+  <circle cx="29.50" cy="11.00" r="2.50" fill="currentColor" opacity="0.4"/>
+  <circle cx="39.00" cy="40.00" r="2.50" fill="currentColor" opacity="0.4"/>
+  <circle cx="20.50" cy="23.00" r="3.80" fill="currentColor"/>
+  <circle cx="32.00" cy="30.50" r="3.80" fill="currentColor"/>
+  <circle cx="9.50" cy="34.50" r="4.80" fill="currentColor"/>
+  <circle cx="40.50" cy="19.50" r="4.80" fill="currentColor"/>
+</g><g transform="translate(70.0,40.7)" fill="currentColor"><path d="M3.04 0V-32.2H14.31L19.87 -4.14H20.7L26.27 -32.2H37.54V0H31.65V-27.74H30.82L25.3 0H15.27L9.75 -27.74H8.92V0Z M53.36 0.64Q49.96 0.64 47.36 -0.8Q44.76 -2.25 43.31 -4.9Q41.86 -7.54 41.86 -11.13V-11.68Q41.86 -15.27 43.29 -17.92Q44.71 -20.56 47.29 -22.01Q49.86 -23.46 53.27 -23.46Q56.63 -23.46 59.11 -21.96Q61.59 -20.47 62.97 -17.82Q64.35 -15.18 64.35 -11.68V-9.71H47.75Q47.84 -7.36 49.5 -5.89Q51.15 -4.42 53.54 -4.42Q55.98 -4.42 57.13 -5.47Q58.28 -6.53 58.88 -7.82L63.62 -5.34Q62.97 -4.14 61.76 -2.74Q60.54 -1.33 58.51 -0.35Q56.49 0.64 53.36 0.64ZM47.79 -14.03H58.47Q58.28 -16.01 56.88 -17.2Q55.48 -18.4 53.22 -18.4Q50.88 -18.4 49.5 -17.2Q48.12 -16.01 47.79 -14.03Z M78.15 0.64Q73.69 0.64 70.84 -1.29Q67.99 -3.22 67.39 -6.81L72.73 -8.19Q73.05 -6.58 73.81 -5.66Q74.57 -4.74 75.69 -4.35Q76.82 -3.96 78.15 -3.96Q80.18 -3.96 81.14 -4.67Q82.11 -5.38 82.11 -6.44Q82.11 -7.5 81.19 -8.07Q80.27 -8.65 78.25 -9.02L76.96 -9.25Q74.57 -9.71 72.59 -10.51Q70.61 -11.32 69.41 -12.74Q68.22 -14.17 68.22 -16.42Q68.22 -19.83 70.7 -21.64Q73.19 -23.46 77.23 -23.46Q81.05 -23.46 83.58 -21.76Q86.11 -20.06 86.89 -17.3L81.51 -15.64Q81.14 -17.39 80.02 -18.12Q78.89 -18.86 77.23 -18.86Q75.58 -18.86 74.7 -18.29Q73.83 -17.71 73.83 -16.7Q73.83 -15.59 74.75 -15.06Q75.67 -14.54 77.23 -14.26L78.52 -14.03Q81.1 -13.57 83.19 -12.81Q85.28 -12.05 86.5 -10.65Q87.72 -9.25 87.72 -6.85Q87.72 -3.27 85.12 -1.31Q82.52 0.64 78.15 0.64Z M91.95 0V-32.2H97.75V-20.01H98.58Q98.95 -20.75 99.73 -21.48Q100.51 -22.22 101.82 -22.7Q103.13 -23.18 105.16 -23.18Q107.82 -23.18 109.82 -21.96Q111.83 -20.75 112.93 -18.61Q114.03 -16.47 114.03 -13.62V0H108.24V-13.16Q108.24 -15.73 106.97 -17.02Q105.71 -18.31 103.36 -18.31Q100.69 -18.31 99.22 -16.54Q97.75 -14.77 97.75 -11.59V0Z M118.36 0V-5.34H122.59V-26.86H118.36V-32.2H134.92Q137.86 -32.2 140.05 -31.21Q142.23 -30.22 143.45 -28.41Q144.67 -26.59 144.67 -24.06V-23.6Q144.67 -21.39 143.84 -19.99Q143.01 -18.58 141.89 -17.82Q140.76 -17.07 139.75 -16.74V-15.92Q140.76 -15.64 141.96 -14.88Q143.15 -14.12 144 -12.7Q144.85 -11.27 144.85 -8.97V-8.51Q144.85 -5.84 143.61 -3.93Q142.37 -2.02 140.19 -1.01Q138 0 135.1 0ZM128.66 -5.52H134.37Q136.34 -5.52 137.56 -6.49Q138.78 -7.45 138.78 -9.25V-9.71Q138.78 -11.5 137.59 -12.47Q136.39 -13.43 134.37 -13.43H128.66ZM128.66 -18.95H134.27Q136.16 -18.95 137.38 -19.92Q138.6 -20.88 138.6 -22.59V-23.05Q138.6 -24.79 137.4 -25.74Q136.21 -26.68 134.27 -26.68H128.66Z M159.57 0.64Q156.17 0.64 153.57 -0.8Q150.97 -2.25 149.52 -4.9Q148.07 -7.54 148.07 -11.13V-11.68Q148.07 -15.27 149.5 -17.92Q150.93 -20.56 153.5 -22.01Q156.08 -23.46 159.48 -23.46Q162.84 -23.46 165.32 -21.96Q167.81 -20.47 169.19 -17.82Q170.57 -15.18 170.57 -11.68V-9.71H153.96Q154.05 -7.36 155.71 -5.89Q157.37 -4.42 159.76 -4.42Q162.2 -4.42 163.35 -5.47Q164.5 -6.53 165.09 -7.82L169.83 -5.34Q169.19 -4.14 167.97 -2.74Q166.75 -1.33 164.73 -0.35Q162.7 0.64 159.57 0.64ZM154.01 -14.03H164.68Q164.5 -16.01 163.09 -17.2Q161.69 -18.4 159.44 -18.4Q157.09 -18.4 155.71 -17.2Q154.33 -16.01 154.01 -14.03Z M174.89 0V-22.82H180.6V-19.83H181.42Q181.98 -21.02 183.49 -22.1Q185.01 -23.18 188.09 -23.18Q190.76 -23.18 192.76 -21.96Q194.76 -20.75 195.87 -18.61Q196.97 -16.47 196.97 -13.62V0H191.18V-13.16Q191.18 -15.73 189.91 -17.02Q188.65 -18.31 186.3 -18.31Q183.63 -18.31 182.16 -16.54Q180.69 -14.77 180.69 -11.59V0Z M213.12 0.64Q209.81 0.64 207.12 -0.74Q204.42 -2.12 202.86 -4.74Q201.3 -7.36 201.3 -11.09V-11.73Q201.3 -15.46 202.86 -18.08Q204.42 -20.7 207.12 -22.08Q209.81 -23.46 213.12 -23.46Q216.38 -23.46 218.73 -22.31Q221.08 -21.16 222.53 -19.16Q223.97 -17.16 224.43 -14.63L218.82 -13.43Q218.64 -14.81 217.99 -15.92Q217.35 -17.02 216.18 -17.66Q215 -18.31 213.26 -18.31Q211.51 -18.31 210.11 -17.55Q208.7 -16.79 207.9 -15.29Q207.09 -13.8 207.09 -11.64V-11.18Q207.09 -9.02 207.9 -7.52Q208.7 -6.03 210.11 -5.27Q211.51 -4.51 213.26 -4.51Q215.88 -4.51 217.24 -5.87Q218.59 -7.22 218.96 -9.43L224.57 -8.1Q223.97 -5.66 222.53 -3.66Q221.08 -1.66 218.73 -0.51Q216.38 0.64 213.12 0.64Z M228.53 0V-32.2H234.32V-20.01H235.15Q235.52 -20.75 236.3 -21.48Q237.08 -22.22 238.39 -22.7Q239.71 -23.18 241.73 -23.18Q244.4 -23.18 246.4 -21.96Q248.4 -20.75 249.5 -18.61Q250.61 -16.47 250.61 -13.62V0H244.81V-13.16Q244.81 -15.73 243.55 -17.02Q242.28 -18.31 239.94 -18.31Q237.27 -18.31 235.8 -16.54Q234.32 -14.77 234.32 -11.59V0Z"/></g></svg>
+      <p>An RF-accurate MeshCore network simulator. GPL-3.0-or-later. MeshCore itself is upstream
+      and unmodified — the build compiles it as it stands, which is the whole basis of the claim
+      that this runs real firmware.</p>
+    </div>
+    <div class="col">
+      <h4>Project</h4>
+      <a href="https://github.com/MeshBench">The organisation</a>
+      <a href="https://github.com/MeshBench/meshbench/releases/latest">Releases</a>
+      <a href="https://github.com/MeshBench/meshbench-reports">Reports</a>
+    </div>
+    <div class="col">
+      <h4>Built on</h4>
+      <a href="https://github.com/meshcore-dev/MeshCore">MeshCore</a>
+      <a href="https://github.com/MeshBench/qemu">Our QEMU</a>
+      <a href="https://github.com/MeshBench/renode">Our Renode</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
