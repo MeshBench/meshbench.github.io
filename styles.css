@@ -6,6 +6,11 @@
   --ink:#14131F; --dim:#6A6480; --line:#E4E0F1; --bg:#FFFFFF;
   --panel:#F5F3FA; --sunk:#EEEBF7;
   --signal:#E8500F; --link:#B93B06; --relay:#5B3BD6;
+  /* The filled button does not follow the theme: it always sits on basalt
+     chrome, and its label is white. White on the mark's #E8500F is 3.76:1,
+     which fails AA for a 15px label, so the fill is one step deeper - still
+     plainly Signal, and 4.63:1 under white. */
+  --btn:#D0450B; --btn-hover:#E8500F;
   --pass:#1B7A44; --warn:#8A6200; --fail:#B22232;
   --basalt:#0B0A12; --slate:#15131F;
   --display:"MeshBench Display", ui-sans-serif, system-ui, sans-serif;
@@ -58,13 +63,13 @@ code, .mono { font-family:var(--mono); font-size:.87em; }
 .masthead .brand { color:#F2EFF9; display:flex; align-items:center; }
 .masthead .brand svg { width:152px; height:auto; display:block; }
 .masthead nav { margin-left:auto; display:flex; gap:22px; align-items:center; }
-.masthead nav a { color:#C9C2E8; text-decoration:none; font-size:14.5px; }
-.masthead nav a:hover { color:#FF7A3D; }
+.masthead nav a:not(.btn) { color:#C9C2E8; text-decoration:none; font-size:14.5px; }
+.masthead nav a:not(.btn):hover { color:#FF7A3D; }
 .btn { display:inline-flex; align-items:center; gap:8px; border-radius:9px;
   padding:10px 17px; font-weight:600; font-size:15px; text-decoration:none;
   font-family:var(--text); border:1px solid transparent; }
-.btn-primary { background:var(--signal); color:#0B0A12; }
-.btn-primary:hover { background:#FF8A3D; }
+.btn-primary { background:var(--btn); color:#FFFFFF; }
+.btn-primary:hover { background:var(--btn-hover); }
 .btn-ghost { border-color:rgba(255,255,255,.22); color:#F2EFF9; }
 .btn-ghost:hover { border-color:#FF7A3D; color:#FF7A3D; }
 .masthead nav .btn { padding:8px 14px; font-size:14px; }
