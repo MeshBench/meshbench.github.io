@@ -29,7 +29,16 @@
   --pass:#2EBD6B; --warn:#F2B705; --fail:#E23D4E;
 }
 
-* { box-sizing:border-box; }
+/* Scrollbars, in the palette rather than the platform's. Thin, transparent
+   track, thumb in the rule colour - the default plate reads as a seam. */
+* { scrollbar-width:thin; scrollbar-color:var(--line) transparent; box-sizing:border-box; }
+::-webkit-scrollbar { width:10px; height:10px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--line); border-radius:6px;
+  border:2px solid transparent; background-clip:padding-box; }
+::-webkit-scrollbar-thumb:hover { background:var(--dim); background-clip:padding-box; }
+::-webkit-scrollbar-corner { background:transparent; }
+.tablewrap { scrollbar-color:var(--line) transparent; }
 html { scroll-behavior:smooth; }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
 body { margin:0; background:var(--bg); color:var(--ink);
