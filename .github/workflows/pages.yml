@@ -19,6 +19,13 @@ concurrency:
 
 jobs:
   deploy:
+    # GitHub Pages serves a private repository only on Pro, Team or Enterprise,
+    # and this organisation is on Free: the deploy step answers "Your current
+    # plan does not support GitHub Pages for this repository". Skipped rather
+    # than failed, so the history is not a column of red crosses for a condition
+    # nobody can fix by changing this file. It runs the moment the repository is
+    # public, and a manual run covers the case where the plan changed instead.
+    if: github.event.repository.visibility == 'public' || github.event_name == 'workflow_dispatch'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
