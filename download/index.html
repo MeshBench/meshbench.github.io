@@ -137,6 +137,8 @@
 
   .alt { flex: 1 1 22rem; min-width: 0; }
   .alt h3 { font-size: .95rem; margin-bottom: .5rem; }
+  .alt-file { font-size: .9rem; }
+  .alt-file a { font-family: var(--mono); font-size: .85rem; }
   .step {
     font-size: .74rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
     color: var(--dim); margin: .7rem 0 .3rem;
@@ -240,6 +242,10 @@
                  background: transparent; font-size: .88rem; color: var(--dim); }
   .page footer a { font-weight: 500; }
   .hidden { display: none; }
+  /* An author display beats the UA sheet's [hidden], so every .chip carrying
+     the attribute stayed on screen - which told people on the bundled build
+     that Setup could not fetch emulators it already had. */
+  .page [hidden] { display: none !important; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -301,10 +307,14 @@
 
     <div class="alt">
       <h3 id="alt-title">Or install with one command</h3>
-      <div class="cmd">
+      <div class="cmd" id="alt-cmd-row">
         <code id="alt-cmd">curl -fsSL https://meshbench.github.io/install.sh | sh</code>
         <button type="button" data-copy="#alt-cmd">Copy</button>
       </div>
+      <!-- Windows has no one-line install, so it gets a link rather than a
+           command box with a filename in it: Copy there handed you text that
+           installs nothing. -->
+      <p class="alt-file" id="alt-file-row" hidden><a id="alt-file" href="#"></a></p>
       <div class="under-btn" id="alt-note"></div>
     </div>
   </div>
@@ -615,7 +625,12 @@ sudo apt update</code>
       compact: ["meshbench-windows-x86_64-compact.msi", "29 MB"],
       note: "x86-64, Windows 10 or later.",
       altTitle: "Or take the zip",
-      alt: { bundled: "meshbench-windows-x86_64-bundled.zip", compact: "meshbench-windows-x86_64-compact.zip" }
+      // A file rather than a command, and the key says which: there is no
+      // one-line install on Windows to put in a copy box.
+      altFile: {
+        bundled: ["meshbench-windows-x86_64-bundled.zip", "120 MB"],
+        compact: ["meshbench-windows-x86_64-compact.zip", "28 MB"]
+      }
     }
   };
 
@@ -630,7 +645,18 @@ sudo apt update</code>
     el("#hero-label").textContent = h.label;
     el("#hero-file").textContent = f[0] + " · " + sizeOf(f[0], f[1]);
     el("#hero-btn").href = BASE + f[0];
-    el("#alt-note").innerHTML = os === "windows"
+    /* One of the two, never both: a command to run, or a file to take. */
+    var win = os === "windows";
+    el("#alt-cmd-row").hidden = win;
+    el("#alt-file-row").hidden = !win;
+    if (win) {
+      var z = h.altFile[variant];
+      el("#alt-file").href = BASE + z[0];
+      el("#alt-file").textContent = z[0] + " · " + sizeOf(z[0], z[1]);
+    } else {
+      el("#alt-cmd").textContent = h.alt[variant];
+    }
+    el("#alt-note").innerHTML = win
       ? "The same build as the installer, without the installer."
       : "Works out your distribution, adds our repository or tap, and installs "
         + (variant === "bundled" ? "<strong>meshbench-bundled</strong>" : "<strong>meshbench</strong>")
@@ -641,7 +667,6 @@ sudo apt update</code>
       ? " Includes the emulators, so an emulated board boots on first run."
       : " The application alone; Setup fetches the emulators when you want them.");
     el("#alt-title").textContent = h.altTitle;
-    el("#alt-cmd").textContent = h.alt[variant];
 
     /* the switch's own caption */
     el("#variant-word").textContent = variant;
