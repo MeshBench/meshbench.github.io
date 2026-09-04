@@ -91,27 +91,31 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 62rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
-  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; }
-  a { color: var(--relay); }
+  /* Never .wrap: that is styles.css's, and the masthead is built from it. */
+  .page { padding-bottom: 5rem; }
+  .page h1, .page h2, .page h3 { font-family: var(--display); font-weight: 700;
+                                 text-wrap: balance; margin: 0; }
+  .page a { color: var(--relay); }
 
   /* The masthead is styles.css's own; only the current-page mark is ours. */
   .masthead nav a[aria-current="page"] { color: #F2EFF9; font-weight: 600; }
 
   /* ---- hero ---- */
-  header { padding: 3.5rem 0 2rem; }
-  .eyebrow {
+  /* Scoped: the masthead is a <header> too, and an unscoped rule here made
+     the bar taller than the landing page's. */
+  .page > header { padding: 3.5rem 0 2rem; }
+  .page .eyebrow {
     font-family: var(--mono); font-size: .75rem; letter-spacing: .08em;
     text-transform: uppercase; color: var(--dim); margin-bottom: .75rem;
   }
-  h1 { font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; }
-  .lede { color: var(--dim); font-size: 1.05rem; max-width: 42rem; margin-top: .75rem; }
+  .page h1 { font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; }
+  .page .lede { color: var(--dim); font-size: 1.05rem; max-width: 42rem; margin-top: .75rem; }
 
   .primary-row {
     display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start;
     margin-top: 2rem;
   }
-  .primary { flex: 1 1 20rem; }
+  .primary { flex: 1 1 20rem; min-width: 0; }
 
   /* The one orange thing. */
   .btn-signal {
@@ -126,7 +130,7 @@
   }
   .under-btn { font-size: .85rem; color: var(--dim); margin-top: .6rem; }
 
-  .alt { flex: 1 1 22rem; }
+  .alt { flex: 1 1 22rem; min-width: 0; }
   .alt h3 { font-size: .95rem; margin-bottom: .5rem; }
   .step {
     font-size: .74rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
@@ -143,6 +147,9 @@
   .cmd code {
     font-family: var(--mono); font-size: .82rem; color: var(--code-ink);
     padding: .7rem .85rem; overflow-x: auto; white-space: pre; flex: 1; display: block;
+    /* Same reason: without this the code sets the row's width instead of
+       scrolling inside it. */
+    min-width: 0;
   }
   .cmd button {
     border: 0; border-left: 1px solid rgba(255,255,255,.12); background: transparent;
@@ -168,23 +175,23 @@
   .seg button[aria-pressed="true"] { background: var(--relay); color: #fff; }
 
   /* ---- variant cards ---- */
-  section { margin-top: 3.5rem; }
-  section > h2 { font-size: 1.4rem; }
-  section > p.intro { color: var(--dim); max-width: 46rem; margin-top: .5rem; }
+  .page section { margin-top: 3.5rem; padding: 0; border-top: 0; }
+  .page section > h2 { font-size: 1.4rem; }
+  .page section > p.intro { color: var(--dim); max-width: 46rem; margin-top: .5rem; }
 
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-  .card { border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem; background: var(--paper); }
-  .card.on { border-color: var(--relay); box-shadow: 0 0 0 1px var(--relay); }
-  .card h3 { font-size: 1.05rem; }
-  .card .size { font-family: var(--mono); font-size: .78rem; color: var(--dim); margin-top: .15rem; }
-  .card p { font-size: .9rem; color: var(--dim); margin: .7rem 0 0; }
-  .card ul { margin: .8rem 0 0; padding-left: 1.1rem; font-size: .87rem; }
-  .card li { margin: .25rem 0; }
-  .card li.no { color: var(--dim); }
+  .page .card { border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem; background: var(--paper); }
+  .page .card.on { border-color: var(--relay); box-shadow: 0 0 0 1px var(--relay); }
+  .page .card h3 { font-size: 1.05rem; }
+  .page .card .size { font-family: var(--mono); font-size: .78rem; color: var(--dim); margin-top: .15rem; }
+  .page .card p { font-size: .9rem; color: var(--dim); margin: .7rem 0 0; }
+  .page .card ul { margin: .8rem 0 0; padding-left: 1.1rem; font-size: .87rem; }
+  .page .card li { margin: .25rem 0; }
+  .page .card li.no { color: var(--dim); }
 
-  table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; font-size: .9rem; }
-  th, td { text-align: left; padding: .6rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); }
+  .page table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; font-size: .9rem; }
+  .page th, .page td { text-align: left; padding: .6rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .page th { font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); }
   td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
   .scroll { overflow-x: auto; }
 
@@ -224,8 +231,9 @@
   }
   .callout strong { display: block; margin-bottom: .2rem; }
 
-  footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-size: .88rem; color: var(--dim); }
-  footer a { font-weight: 500; }
+  .page footer { margin-top: 4rem; padding: 1.5rem 0 0; border-top: 1px solid var(--line);
+                 background: transparent; font-size: .88rem; color: var(--dim); }
+  .page footer a { font-weight: 500; }
   .hidden { display: none; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -264,7 +272,7 @@
   </div>
 </header>
 
-<div class="wrap" id="top">
+<div class="wrap page" id="top">
 
 <header>
   <div class="eyebrow">MeshBench <span id="ver">v0.0.6</span> &middot; released <span id="released">4 September 2026</span></div>
