@@ -101,8 +101,9 @@
      does not have to know to fight it. */
   .page a:not([class*="btn-"]) { color: var(--relay); }
 
-  /* The masthead is styles.css's own; only the current-page mark is ours. */
-  .masthead nav a[aria-current="page"] { color: #F2EFF9; font-weight: 600; }
+  /* The masthead is entirely styles.css's. Nothing here styles it: the bar
+     should look the same on every page, and aria-current carries "you are
+     here" for a screen reader without changing how it looks. */
 
   /* ---- hero ---- */
   /* Scoped: the masthead is a <header> too, and an unscoped rule here made
@@ -271,7 +272,7 @@
       <a href="/#physics">The physics</a>
       <a href="/#boards">Boards</a>
       <a href="/#limits">Limits</a>
-      <a href="/download/" aria-current="page">Download</a>
+      <a class="btn btn-primary" href="/download/" aria-current="page">Download</a>
     </nav>
   </div>
 </header>
