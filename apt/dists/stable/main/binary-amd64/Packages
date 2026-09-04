@@ -1,0 +1,38 @@
+Package: meshbench-bundled
+Architecture: amd64
+Version: 0.0.6
+Priority: optional
+Section: science
+Maintainer: MeshBench <noreply@github.com>
+Provides: meshbench
+Depends: libc6 (>= 2.34), libgl1, libx11-6, libxkbcommon0, libwayland-client0, libvulkan1
+Conflicts: meshbench
+Replaces: meshbench
+Filename: pool/main/m/meshbench/meshbench-bundled_0.0.6_amd64.deb
+Size: 92701092
+MD5sum: 4499df1d197dc16a0dc4b50440a308de
+SHA1: a42d5497da66a81471861948e2971680c63e4c0f
+SHA256: dc5f59fb1e690698bc595be44da4ca0aac9e86a720e3f54381b0beb73b37a959
+SHA512: 2be24e9343e77091688d2078ce17e7c9c67b9755e9072b365f866caf616bea0953fad18c8d20a816dca257e469906d6826b999b188ce9542f048e0ccbe79293f
+Description: Plan and test MeshCore LoRa networks against real firmware
+ MeshBench runs real MeshCore firmware against a sample-accurate LoRa
+ channel over real terrain, and says what arrived at the antenna and why.
+
+Package: meshbench
+Architecture: amd64
+Version: 0.0.6
+Priority: optional
+Section: science
+Maintainer: MeshBench <noreply@github.com>
+Depends: libc6 (>= 2.34), libgl1, libx11-6, libxkbcommon0, libwayland-client0, libvulkan1
+Conflicts: meshbench-bundled
+Filename: pool/main/m/meshbench/meshbench_0.0.6_amd64.deb
+Size: 25744492
+MD5sum: 7968b013daa1efa2d92691fb0c5a253f
+SHA1: d58ae92c476542ad8a57435a43b84eb59fc12114
+SHA256: b083c3bd2d268bc60f1567c5ca12cebd3cbf1f2d822618d5bf9553d3a438b629
+SHA512: a0ac4282e0c22b6ffe46dfc49b1f0d1378b5c41eb8652bd9429b4515eba4144421c160db0f66154e087704c3ed0383c5621e861be57f3151583d9e242212d44a
+Description: Plan and test MeshCore LoRa networks against real firmware
+ MeshBench runs real MeshCore firmware against a sample-accurate LoRa
+ channel over real terrain, and says what arrived at the antenna and why.
+

@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64
+Codename: stable
+Components: main
+Date: Fri, 04 Sep 2026 11:09:59 +0000
+Description: MeshBench, an RF-accurate MeshCore simulator
+Label: MeshBench
+Origin: MeshBench
+Suite: stable
+MD5Sum:
+ 50813e55e3fa89b0a9a12087ae58f0a1              200 Release
+ 31839235c86577bef3ee041c27987686             1728 main/binary-amd64/Packages
+ db73fd11ad6f9acbf4734fb79148433b              805 main/binary-amd64/Packages.gz
+SHA1:
+ a5be0f789762f4a6e525b2b633eeeaa5b20069e2              200 Release
+ 5fa59b9aff6ba87442859135684d0151107e7598             1728 main/binary-amd64/Packages
+ b6d6019f4f75314ff8a9be7bc69ee403bb04a5a7              805 main/binary-amd64/Packages.gz
+SHA256:
+ f879871a6b130f08570a64fef0261f22a03c23cf446a34a111d7e47303c0aa53              200 Release
+ 6bfb06600f53809fc435e45ff35e506817d998227068519b4e3a7686d29cc6d9             1728 main/binary-amd64/Packages
+ 3c4e2da1159ca61e462a12a1175c1823eaa176b717ce7c6a67518421f68426eb              805 main/binary-amd64/Packages.gz
+SHA512:
+ 8c75f17b2579e6aa9d2be0307703e04933d7ed19409326bcda234035b2f5766646fc0ac3d38d624d325b948ef3de6771c52fa9b56f8e70c42d52fadd7be41f9b              200 Release
+ f697fcffa5a816252e82d8e19ea1cecf9b70e133b6c37332ef571e2b23b60d7235aa6ec7344ae3796880d695284a4f1a4826141da97a5b690b4277ef5980b38e             1728 main/binary-amd64/Packages
+ 4adaafdb6a77bedbe02b6965a65efa9752dc06872f286cdd95e560c48d1e2cfba28dfef86e2443723ca1f52c32046644a9be9dfe29e8ce3d1ad53f0eb5091ee2              805 main/binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEUDzAwaEyl/GxQz4a8KyQHyRUdzUFAmqapwcACgkQ8KyQHyRU
+dzV+2g//fK4/GE6flzkUe0R1Voa9BRw1c1zR4+Z4I5hqvY3MNLsw3dz7CFR3a6Ql
+FeUSGffyCJ5ZIanYkPRWYpR+UPM6DW+UZo2g+Udz62KWYcwV/bHR5JMYhJhnlxt/
+XxCDMfia4kFmCHdxSyXSVD7zPUlB0Hpw+FabwRhdvr6D6uFbUTJ3CWRV0CO39YSk
+oKp2aCnDbNp2HqHwX4cqWSdfJ6dlZkIDup0SKFB4v3dLlIW6CRN0pi8vcXkiYs1x
+onGvqBxUwEIbVZULJ8NhWCHF+Qbe8U2v3XYtrfno0wN2UIuj7DxOLyGBON3NQmVx
+BwlWzQ44QpdS/yeaga7VShwtbJyY0Pd5a/feg/rygHPLFAqaHlIXVj8FlwdL51sm
+rDzdzed+ILK/YQUvFraCHT09arUlYj2ObWLztFLMSAwe3EEAvjR/lcr8JKSvgFuJ
+ktVwygKC2cQiQgZ5dRI4l/cIrV6lXhrKFBKqraIch/FEYJHzmiyJRx10jnpix6zj
+Y4e848xcb+UTgntPyy79UCpomzWGhrflY29D1N2v1j9H4URAaNSA1NpwJ2klTkYZ
+K6Os8tzNv4g08/jc3EsS10/NNa2IQb1Is4iZi0wQcIGrsf0FhWOtqIZv9zbJbpYY
+Hpi96TH0HRcst81zRDNNT1ZumPsRRUeSYbgdgSTgDFA7Zy4asxw=
+=3/0R
+-----END PGP SIGNATURE-----
