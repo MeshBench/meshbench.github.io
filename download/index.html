@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download MeshBench</title>
+<meta name="description" content="Download MeshBench for macOS, Linux or Windows, bundled with the emulators or as the application alone.">
+<link rel="icon" href="/brand/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B0A12">
+<meta property="og:title" content="Download MeshBench">
+<meta property="og:description" content="One command, or a download for your platform. Bundled with the emulators, or the application alone.">
+<meta property="og:image" content="/brand/card.png">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  /* Palette is MeshBench/brand's own tokens, not invented here.
+     The one rule it carries: orange is signal - traffic, the route, the node
+     transmitting. Never a surface, never a status, never decoration. So orange
+     appears twice and only twice: in the mark, where it is the lit route and
+     the transmitting node, and on the one download we recommend. Violet carries
+     every other piece of structure, and status has its own greens and ambers. */
+  :root {
+    --signal: #E8500F;
+    --signal-deep: #B93B06;
+    --relay: #5B3BD6;
+    --ink: #14131F;
+    --dim: #6A6480;
+    --paper: #FFFFFF;
+    --mist: #F5F3FA;
+    --line: #E4E0EE;
+    --pass: #1B7A44;
+    --warn: #8A6200;
+    --pass-bg: #E9F7EF;
+    --warn-bg: #FDF6E0;
+    --code-bg: #14131F;
+    --code-ink: #F2EFF9;
+
+    /* The filled button and the masthead do not follow the theme: both sit on
+       basalt chrome with white labels. White on the mark's #E8500F is 3.76:1
+       and fails AA at this size, so the fill is one step deeper - still plainly
+       signal, and 4.63:1 under white. The landing site solved this already;
+       this is its answer rather than a second one. */
+    --basalt: #0B0A12;
+    --btn-fill: #D0450B;
+    --btn-fill-hover: #E8500F;
+
+    --display: "MeshBench Display", ui-sans-serif, system-ui, sans-serif;
+    --body: "MeshBench Text", ui-sans-serif, system-ui, sans-serif;
+    --mono: "MeshBench Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --signal: #FF7A3D;
+      --signal-deep: #FF7A3D;
+      --relay: #7C5CFF;
+      --ink: #F2EFF9;
+      --dim: #9A93B8;
+      --paper: #0B0A12;
+      --mist: #14131F;
+      --line: #262233;
+      --pass: #58D493;
+      --warn: #F2B705;
+      --pass-bg: #10241A;
+      --warn-bg: #251E08;
+      --code-bg: #08070E;
+      --code-ink: #F2EFF9;
+    }
+  }
+  :root[data-theme="dark"] {
+    --signal: #FF7A3D;
+    --signal-deep: #FF7A3D;
+    --relay: #7C5CFF;
+    --ink: #F2EFF9;
+    --dim: #9A93B8;
+    --paper: #0B0A12;
+    --mist: #14131F;
+    --line: #262233;
+    --pass: #58D493;
+    --warn: #F2B705;
+    --pass-bg: #10241A;
+    --warn-bg: #251E08;
+    --code-bg: #08070E;
+    --code-ink: #F2EFF9;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 62rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; }
+  a { color: var(--relay); }
+
+  /* The masthead is styles.css's own; only the current-page mark is ours. */
+  .masthead nav a[aria-current="page"] { color: #F2EFF9; font-weight: 600; }
+
+  /* ---- hero ---- */
+  header { padding: 3.5rem 0 2rem; }
+  .eyebrow {
+    font-family: var(--mono); font-size: .75rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--dim); margin-bottom: .75rem;
+  }
+  h1 { font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; }
+  .lede { color: var(--dim); font-size: 1.05rem; max-width: 42rem; margin-top: .75rem; }
+
+  .primary-row {
+    display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start;
+    margin-top: 2rem;
+  }
+  .primary { flex: 1 1 20rem; }
+
+  /* The one orange thing. */
+  .btn-signal {
+    display: inline-flex; flex-direction: column; gap: .15rem;
+    background: var(--btn-fill); color: #fff; text-decoration: none;
+    padding: .85rem 1.4rem; border-radius: 8px; font-weight: 600;
+    box-shadow: 0 1px 0 rgba(0,0,0,.12);
+  }
+  .btn-signal:hover { background: var(--btn-fill-hover); }
+  .btn-signal .file {
+    font-family: var(--mono); font-size: .72rem; font-weight: 400; opacity: .9;
+  }
+  .under-btn { font-size: .85rem; color: var(--dim); margin-top: .6rem; }
+
+  .alt { flex: 1 1 22rem; }
+  .alt h3 { font-size: .95rem; margin-bottom: .5rem; }
+  .step {
+    font-size: .74rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--dim); margin: .7rem 0 .3rem;
+  }
+  .step:first-of-type { margin-top: 0; }
+  .step .once { font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+  /* ---- code ---- */
+  .cmd {
+    display: flex; align-items: stretch; gap: 0; background: var(--code-bg);
+    border-radius: 8px; overflow: hidden; border: 1px solid var(--line);
+  }
+  .cmd code {
+    font-family: var(--mono); font-size: .82rem; color: var(--code-ink);
+    padding: .7rem .85rem; overflow-x: auto; white-space: pre; flex: 1; display: block;
+  }
+  .cmd button {
+    border: 0; border-left: 1px solid rgba(255,255,255,.12); background: transparent;
+    color: var(--code-ink); font-family: var(--body); font-size: .75rem;
+    padding: 0 .8rem; cursor: pointer; opacity: .75;
+  }
+  .cmd button:hover { opacity: 1; }
+
+  /* ---- the variant switch ---- */
+  .variant-bar {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+    justify-content: space-between; background: var(--mist);
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: .9rem 1.1rem; margin: 2.5rem 0 0;
+  }
+  .variant-bar .label { font-size: .9rem; font-weight: 600; }
+  .variant-bar .why { font-size: .85rem; color: var(--dim); }
+  .seg { display: inline-flex; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 3px; }
+  .seg button {
+    border: 0; background: transparent; font-family: var(--body); font-size: .85rem;
+    font-weight: 600; color: var(--dim); padding: .4rem .9rem; border-radius: 6px; cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { background: var(--relay); color: #fff; }
+
+  /* ---- variant cards ---- */
+  section { margin-top: 3.5rem; }
+  section > h2 { font-size: 1.4rem; }
+  section > p.intro { color: var(--dim); max-width: 46rem; margin-top: .5rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem; background: var(--paper); }
+  .card.on { border-color: var(--relay); box-shadow: 0 0 0 1px var(--relay); }
+  .card h3 { font-size: 1.05rem; }
+  .card .size { font-family: var(--mono); font-size: .78rem; color: var(--dim); margin-top: .15rem; }
+  .card p { font-size: .9rem; color: var(--dim); margin: .7rem 0 0; }
+  .card ul { margin: .8rem 0 0; padding-left: 1.1rem; font-size: .87rem; }
+  .card li { margin: .25rem 0; }
+  .card li.no { color: var(--dim); }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; font-size: .9rem; }
+  th, td { text-align: left; padding: .6rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .scroll { overflow-x: auto; }
+
+  /* ---- platform tabs ---- */
+  .tabs { display: flex; gap: .25rem; border-bottom: 1px solid var(--line); margin-top: 1.5rem; flex-wrap: wrap; }
+  .tabs button {
+    border: 0; background: transparent; font-family: var(--body); font-weight: 600;
+    font-size: .95rem; color: var(--dim); padding: .7rem 1rem; cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--relay); }
+  .tabs .detected { font-size: .7rem; font-weight: 500; color: var(--dim); }
+
+  .method { border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.2rem; margin-top: 1rem; }
+  .method-head { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: baseline; justify-content: space-between; }
+  .method h3 { font-size: 1rem; }
+  .method .note { font-size: .85rem; color: var(--dim); margin: .5rem 0 .75rem; }
+  .method .file-row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: .5rem; }
+  .btn-quiet {
+    display: inline-block; border: 1px solid var(--line); border-radius: 7px;
+    padding: .5rem .9rem; text-decoration: none; color: var(--ink);
+    font-weight: 600; font-size: .88rem; background: var(--mist);
+  }
+  .btn-quiet:hover { border-color: var(--relay); }
+  .btn-quiet .fn { font-family: var(--mono); font-weight: 400; font-size: .75rem; color: var(--dim); display: block; }
+
+  .chip {
+    display: inline-block; font-size: .72rem; font-weight: 600; padding: .18rem .5rem;
+    border-radius: 999px; white-space: nowrap;
+  }
+  .chip.pass { background: var(--pass-bg); color: var(--pass); }
+  .chip.warn { background: var(--warn-bg); color: var(--warn); }
+
+  .callout {
+    border-left: 3px solid var(--warn); background: var(--warn-bg);
+    padding: .85rem 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem; font-size: .89rem;
+  }
+  .callout strong { display: block; margin-bottom: .2rem; }
+
+  footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-size: .88rem; color: var(--dim); }
+  footer a { font-weight: 500; }
+  .hidden { display: none; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MeshBench"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324.6 49.2" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="MeshBench"><g transform="translate(-6.25,-11.31) scale(1.3300)">
+  <path d="M 9.50 34.50 L 18.00 43.00" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 18.00 43.00 L 32.00 30.50" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 18.00 43.00 L 20.50 23.00" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 20.50 23.00 L 29.50 11.00" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 29.50 11.00 L 40.50 19.50" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 32.00 30.50 L 39.00 40.00" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 40.50 19.50 L 39.00 40.00" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 9.50 34.50 L 29.50 11.00" stroke="#7C5CFF" stroke-width="1.8" opacity="0.26"/>
+  <path d="M 9.50 34.50 L 20.50 23.00" stroke="#FF7A3D" stroke-width="3.2"/>
+  <path d="M 20.50 23.00 L 32.00 30.50" stroke="#FF7A3D" stroke-width="3.2"/>
+  <path d="M 32.00 30.50 L 40.50 19.50" stroke="#FF7A3D" stroke-width="3.2"/>
+  <circle cx="18.00" cy="43.00" r="2.50" fill="#7C5CFF" opacity="0.4"/>
+  <circle cx="29.50" cy="11.00" r="2.50" fill="#7C5CFF" opacity="0.4"/>
+  <circle cx="39.00" cy="40.00" r="2.50" fill="#7C5CFF" opacity="0.4"/>
+  <circle cx="20.50" cy="23.00" r="3.80" fill="#F2EFF9"/>
+  <circle cx="32.00" cy="30.50" r="3.80" fill="#F2EFF9"/>
+  <circle cx="9.50" cy="34.50" r="4.80" fill="#FF7A3D"/>
+  <circle cx="40.50" cy="19.50" r="4.80" fill="#F2EFF9"/>
+</g><g transform="translate(70.0,40.7)" fill="#F2EFF9"><path d="M3.04 0V-32.2H14.31L19.87 -4.14H20.7L26.27 -32.2H37.54V0H31.65V-27.74H30.82L25.3 0H15.27L9.75 -27.74H8.92V0Z M53.36 0.64Q49.96 0.64 47.36 -0.8Q44.76 -2.25 43.31 -4.9Q41.86 -7.54 41.86 -11.13V-11.68Q41.86 -15.27 43.29 -17.92Q44.71 -20.56 47.29 -22.01Q49.86 -23.46 53.27 -23.46Q56.63 -23.46 59.11 -21.96Q61.59 -20.47 62.97 -17.82Q64.35 -15.18 64.35 -11.68V-9.71H47.75Q47.84 -7.36 49.5 -5.89Q51.15 -4.42 53.54 -4.42Q55.98 -4.42 57.13 -5.47Q58.28 -6.53 58.88 -7.82L63.62 -5.34Q62.97 -4.14 61.76 -2.74Q60.54 -1.33 58.51 -0.35Q56.49 0.64 53.36 0.64ZM47.79 -14.03H58.47Q58.28 -16.01 56.88 -17.2Q55.48 -18.4 53.22 -18.4Q50.88 -18.4 49.5 -17.2Q48.12 -16.01 47.79 -14.03Z M78.15 0.64Q73.69 0.64 70.84 -1.29Q67.99 -3.22 67.39 -6.81L72.73 -8.19Q73.05 -6.58 73.81 -5.66Q74.57 -4.74 75.69 -4.35Q76.82 -3.96 78.15 -3.96Q80.18 -3.96 81.14 -4.67Q82.11 -5.38 82.11 -6.44Q82.11 -7.5 81.19 -8.07Q80.27 -8.65 78.25 -9.02L76.96 -9.25Q74.57 -9.71 72.59 -10.51Q70.61 -11.32 69.41 -12.74Q68.22 -14.17 68.22 -16.42Q68.22 -19.83 70.7 -21.64Q73.19 -23.46 77.23 -23.46Q81.05 -23.46 83.58 -21.76Q86.11 -20.06 86.89 -17.3L81.51 -15.64Q81.14 -17.39 80.02 -18.12Q78.89 -18.86 77.23 -18.86Q75.58 -18.86 74.7 -18.29Q73.83 -17.71 73.83 -16.7Q73.83 -15.59 74.75 -15.06Q75.67 -14.54 77.23 -14.26L78.52 -14.03Q81.1 -13.57 83.19 -12.81Q85.28 -12.05 86.5 -10.65Q87.72 -9.25 87.72 -6.85Q87.72 -3.27 85.12 -1.31Q82.52 0.64 78.15 0.64Z M91.95 0V-32.2H97.75V-20.01H98.58Q98.95 -20.75 99.73 -21.48Q100.51 -22.22 101.82 -22.7Q103.13 -23.18 105.16 -23.18Q107.82 -23.18 109.82 -21.96Q111.83 -20.75 112.93 -18.61Q114.03 -16.47 114.03 -13.62V0H108.24V-13.16Q108.24 -15.73 106.97 -17.02Q105.71 -18.31 103.36 -18.31Q100.69 -18.31 99.22 -16.54Q97.75 -14.77 97.75 -11.59V0Z M118.36 0V-5.34H122.59V-26.86H118.36V-32.2H134.92Q137.86 -32.2 140.05 -31.21Q142.23 -30.22 143.45 -28.41Q144.67 -26.59 144.67 -24.06V-23.6Q144.67 -21.39 143.84 -19.99Q143.01 -18.58 141.89 -17.82Q140.76 -17.07 139.75 -16.74V-15.92Q140.76 -15.64 141.96 -14.88Q143.15 -14.12 144 -12.7Q144.85 -11.27 144.85 -8.97V-8.51Q144.85 -5.84 143.61 -3.93Q142.37 -2.02 140.19 -1.01Q138 0 135.1 0ZM128.66 -5.52H134.37Q136.34 -5.52 137.56 -6.49Q138.78 -7.45 138.78 -9.25V-9.71Q138.78 -11.5 137.59 -12.47Q136.39 -13.43 134.37 -13.43H128.66ZM128.66 -18.95H134.27Q136.16 -18.95 137.38 -19.92Q138.6 -20.88 138.6 -22.59V-23.05Q138.6 -24.79 137.4 -25.74Q136.21 -26.68 134.27 -26.68H128.66Z M159.57 0.64Q156.17 0.64 153.57 -0.8Q150.97 -2.25 149.52 -4.9Q148.07 -7.54 148.07 -11.13V-11.68Q148.07 -15.27 149.5 -17.92Q150.93 -20.56 153.5 -22.01Q156.08 -23.46 159.48 -23.46Q162.84 -23.46 165.32 -21.96Q167.81 -20.47 169.19 -17.82Q170.57 -15.18 170.57 -11.68V-9.71H153.96Q154.05 -7.36 155.71 -5.89Q157.37 -4.42 159.76 -4.42Q162.2 -4.42 163.35 -5.47Q164.5 -6.53 165.09 -7.82L169.83 -5.34Q169.19 -4.14 167.97 -2.74Q166.75 -1.33 164.73 -0.35Q162.7 0.64 159.57 0.64ZM154.01 -14.03H164.68Q164.5 -16.01 163.09 -17.2Q161.69 -18.4 159.44 -18.4Q157.09 -18.4 155.71 -17.2Q154.33 -16.01 154.01 -14.03Z M174.89 0V-22.82H180.6V-19.83H181.42Q181.98 -21.02 183.49 -22.1Q185.01 -23.18 188.09 -23.18Q190.76 -23.18 192.76 -21.96Q194.76 -20.75 195.87 -18.61Q196.97 -16.47 196.97 -13.62V0H191.18V-13.16Q191.18 -15.73 189.91 -17.02Q188.65 -18.31 186.3 -18.31Q183.63 -18.31 182.16 -16.54Q180.69 -14.77 180.69 -11.59V0Z M213.12 0.64Q209.81 0.64 207.12 -0.74Q204.42 -2.12 202.86 -4.74Q201.3 -7.36 201.3 -11.09V-11.73Q201.3 -15.46 202.86 -18.08Q204.42 -20.7 207.12 -22.08Q209.81 -23.46 213.12 -23.46Q216.38 -23.46 218.73 -22.31Q221.08 -21.16 222.53 -19.16Q223.97 -17.16 224.43 -14.63L218.82 -13.43Q218.64 -14.81 217.99 -15.92Q217.35 -17.02 216.18 -17.66Q215 -18.31 213.26 -18.31Q211.51 -18.31 210.11 -17.55Q208.7 -16.79 207.9 -15.29Q207.09 -13.8 207.09 -11.64V-11.18Q207.09 -9.02 207.9 -7.52Q208.7 -6.03 210.11 -5.27Q211.51 -4.51 213.26 -4.51Q215.88 -4.51 217.24 -5.87Q218.59 -7.22 218.96 -9.43L224.57 -8.1Q223.97 -5.66 222.53 -3.66Q221.08 -1.66 218.73 -0.51Q216.38 0.64 213.12 0.64Z M228.53 0V-32.2H234.32V-20.01H235.15Q235.52 -20.75 236.3 -21.48Q237.08 -22.22 238.39 -22.7Q239.71 -23.18 241.73 -23.18Q244.4 -23.18 246.4 -21.96Q248.4 -20.75 249.5 -18.61Q250.61 -16.47 250.61 -13.62V0H244.81V-13.16Q244.81 -15.73 243.55 -17.02Q242.28 -18.31 239.94 -18.31Q237.27 -18.31 235.8 -16.54Q234.32 -14.77 234.32 -11.59V0Z"/></g></svg></a>
+    <nav>
+      <a href="/#uses">What it is for</a>
+      <a href="/#physics">The physics</a>
+      <a href="/#boards">Boards</a>
+      <a href="/#limits">Limits</a>
+      <a href="/download/" aria-current="page">Download</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap" id="top">
+
+<header>
+  <div class="eyebrow">MeshBench <span id="ver">v0.0.6</span> &middot; released <span id="released">4 September 2026</span></div>
+  <h1>Download MeshBench</h1>
+  <p class="lede">
+    An RF-accurate MeshCore simulator. It runs real firmware against a sample-accurate
+    LoRa channel, so a result tells you what arrived at the antenna and why.
+  </p>
+
+  <div class="primary-row">
+    <div class="primary">
+      <a class="btn-signal" id="hero-btn" href="https://github.com/MeshBench/meshbench/releases/latest/download/MeshBench-arm64-bundled.dmg">
+        <span id="hero-label">Download for macOS</span>
+        <span class="file" id="hero-file">MeshBench-arm64-bundled.dmg &middot; 118 MB</span>
+      </a>
+      <div class="under-btn" id="hero-note">
+        Apple silicon, macOS 12+. Includes the emulators, so an emulated board boots on
+        first run.
+      </div>
+    </div>
+
+    <div class="alt">
+      <h3 id="alt-title">Or install with one command</h3>
+      <div class="cmd">
+        <code id="alt-cmd">curl -fsSL https://meshbench.github.io/install.sh | sh</code>
+        <button type="button" data-copy="#alt-cmd">Copy</button>
+      </div>
+      <div class="under-btn" id="alt-note"></div>
+    </div>
+  </div>
+</header>
+
+<div class="variant-bar">
+  <div>
+    <div class="label">Showing the <span id="variant-word">bundled</span> build</div>
+    <div class="why" id="variant-why">Everything included. Nothing to fetch on first run.</div>
+  </div>
+  <div class="seg" role="group" aria-label="Which build">
+    <button type="button" data-variant="bundled" aria-pressed="true">Bundled</button>
+    <button type="button" data-variant="compact" aria-pressed="false">Compact</button>
+  </div>
+</div>
+
+<section id="which">
+  <h2>Which build do you want?</h2>
+  <p class="intro">
+    Both are the same application. The difference is whether the emulators travel with it,
+    and that only matters if you intend to run the firmware images people actually flash.
+  </p>
+
+  <div class="cards">
+    <div class="card on" id="card-bundled">
+      <h3>Bundled</h3>
+      <div class="size">about 118 MB</div>
+      <p>You want an emulated board to boot the moment it lands, with nothing to fetch and
+         nothing to explain. This is the right answer for a one-off download.</p>
+      <ul>
+        <li>MeshBench itself</li>
+        <li>QEMU and Renode, our forks</li>
+        <li>The SX1262 chip model</li>
+        <li>Renode's platform descriptions</li>
+      </ul>
+    </div>
+    <div class="card" id="card-compact">
+      <h3>Compact</h3>
+      <div class="size">about 26 MB</div>
+      <p>You already have the forks built, you are scripting a container, or you care about
+         coverage, link budgets and native firmware and may never point it at an emulated
+         board. It completes itself from Configuration&nbsp;&gt;&nbsp;Setup.</p>
+      <ul>
+        <li>MeshBench itself</li>
+        <li>The SX1262 chip model</li>
+        <li class="no">No emulators - fetched on demand</li>
+        <li class="no">About 105 MB when you do</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>&nbsp;</th><th>Bundled</th><th>Compact</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Coverage, link budgets, planning</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td>Native firmware nodes</td><td>Yes</td><td>Yes <span class="chip pass">downloads MeshCore on first use either way</span></td></tr>
+        <tr><td>Emulated boards, straight away</td><td>Yes</td><td>After Setup fetches the emulators</td></tr>
+        <tr><td>Download</td><td class="num">~118 MB</td><td class="num">~26 MB</td></tr>
+        <tr><td>Needs the network on first run</td><td>For terrain and firmware only</td><td>Also for the emulators</td></tr>
+        <tr><td>What a package manager gives you</td><td><code style="font-family:var(--mono);font-size:.85em">meshbench-bundled</code></td><td><code style="font-family:var(--mono);font-size:.85em">meshbench</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="all">
+  <h2>Every platform</h2>
+  <p class="intro">
+    Choose an operating system. The build shown follows the switch above.
+  </p>
+
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" data-os="macos" aria-selected="true">macOS <span class="detected" id="det-macos"></span></button>
+    <button type="button" role="tab" data-os="linux" aria-selected="false">Linux <span class="detected" id="det-linux"></span></button>
+    <button type="button" role="tab" data-os="windows" aria-selected="false">Windows <span class="detected" id="det-windows"></span></button>
+  </div>
+
+  <!-- macOS -->
+  <div class="os-panel" data-os="macos">
+    <div class="method">
+      <div class="method-head"><h3>One command</h3><span class="chip pass">Recommended</span></div>
+      <p class="note">Works out your distribution, adds our repository or tap, and installs
+        through it. The same line on macOS and Linux, and on macOS it installs
+        through Homebrew, so the quarantine flag is handled for you.</p>
+      <div class="cmd">
+        <code class="v-cmd"
+          data-bundled="curl -fsSL https://meshbench.github.io/install.sh | sh -s -- --bundled"
+          data-compact="curl -fsSL https://meshbench.github.io/install.sh | sh">curl -fsSL https://meshbench.github.io/install.sh | sh -s -- --bundled</code>
+        <button type="button" data-copy="prev">Copy</button>
+      </div>
+      <p class="note" style="margin-bottom:0">
+        It is a shell script from the internet, so
+        <a href="https://github.com/MeshBench/meshbench.github.io/blob/main/install.sh">read it first</a>
+        if you would rather. Everything it does is spelled out below.
+      </p>
+    </div>
+
+    <div class="method" id="by-hand">
+      <div class="method-head"><h3>Homebrew, by hand</h3></div>
+      <p class="note">Handles the quarantine flag for you. We are not notarised, so a
+        disk image otherwise needs a right-click and Open on first launch.</p>
+      <div class="step">1 &middot; <span class="once">add our tap, once</span></div>
+      <div class="cmd">
+        <code>brew tap MeshBench/meshbench</code>
+        <button type="button" data-copy="prev">Copy</button>
+      </div>
+      <div class="step">2 &middot; <span class="once">install</span></div>
+      <div class="cmd">
+        <code class="v-cmd" data-bundled="brew install --cask meshbench-bundled" data-compact="brew install --cask meshbench">brew install --cask meshbench-bundled</code>
+        <button type="button" data-copy="prev">Copy</button>
+      </div>
+    </div>
+
+    <div class="method">
+      <div class="method-head"><h3>Disk image</h3></div>
+      <p class="note">Apple silicon, macOS 12 or later.</p>
+      <div class="file-row">
+        <a class="btn-quiet v-file" href="https://github.com/MeshBench/meshbench/releases/latest/download/MeshBench-arm64-bundled.dmg"
+           data-bundled="MeshBench-arm64-bundled.dmg|118 MB"
+           data-compact="MeshBench-arm64-compact.dmg|26 MB">Download
+          <span class="fn"></span></a>
+        <span class="chip warn" id="mac-compact-chip" hidden>Setup cannot fetch Renode for macOS yet</span>
+      </div>
+      <div class="callout" id="mac-compact-note" hidden>
+        <strong>The compact macOS build cannot finish itself yet.</strong>
+        Setup has no Renode package for macOS, so emulated nRF52 boards need the fork built
+        by hand. QEMU is published and untested there. A distribution's own QEMU will not
+        do: it has no SX1262 in it, and a stock Renode sleeps for ever on a wake condition
+        that is already true.
+      </div>
+    </div>
+  </div>
+
+  <!-- Linux -->
+  <div class="os-panel hidden" data-os="linux">
+    <div class="method">
+      <div class="method-head"><h3>One command</h3><span class="chip pass">Recommended</span></div>
+      <p class="note">Works out your distribution, adds our repository or tap, and installs
+        through it. The same line on macOS and Linux, and on macOS it installs
+        through Homebrew, so the quarantine flag is handled for you.</p>
+      <div class="cmd">
+        <code class="v-cmd"
+          data-bundled="curl -fsSL https://meshbench.github.io/install.sh | sh -s -- --bundled"
+          data-compact="curl -fsSL https://meshbench.github.io/install.sh | sh">curl -fsSL https://meshbench.github.io/install.sh | sh -s -- --bundled</code>
+        <button type="button" data-copy="prev">Copy</button>
+      </div>
+      <p class="note" style="margin-bottom:0">
+        It is a shell script from the internet, so
+        <a href="https://github.com/MeshBench/meshbench.github.io/blob/main/install.sh">read it first</a>
+        if you would rather. Everything it does is spelled out below.
+      </p>
+    </div>
+
+    <div class="method" id="by-hand-linux">
+      <div class="method-head"><h3>apt, by hand</h3></div>
+      <p class="note">Updates then arrive with the rest of your system.</p>
+      <div class="step">1 &middot; <span class="once">add our repository, once</span></div>
+      <div class="cmd">
+        <code>curl -fsSL https://meshbench.github.io/apt/meshbench.gpg \
+  | sudo tee /usr/share/keyrings/meshbench.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/meshbench.gpg] https://meshbench.github.io/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/meshbench.list
+sudo apt update</code>
+        <button type="button" data-copy="prev">Copy</button>
+      </div>
+      <div class="step">2 &middot; <span class="once">install</span></div>
+      <div class="cmd">
+        <code>sudo apt install <span class="v-pkg">meshbench-bundled</span></code>
+        <button type="button" data-copy="prev">Copy</button>
+      </div>
+    </div>
+
+    <div class="method">
+      <div class="method-head"><h3>AppImage</h3></div>
+      <p class="note">One file, no install, any distribution.</p>
+      <div class="file-row">
+        <a class="btn-quiet v-file" href="https://github.com/MeshBench/meshbench/releases/latest/download/meshbench-x86_64-bundled.AppImage"
+           data-bundled="meshbench-x86_64-bundled.AppImage|117 MB"
+           data-compact="meshbench-x86_64-compact.AppImage|25 MB">Download
+          <span class="fn"></span></a>
+      </div>
+    </div>
+
+    <div class="method">
+      <div class="method-head"><h3>Archive</h3></div>
+      <p class="note">Unpack anywhere. Nothing is written outside the directory and your cache.</p>
+      <div class="file-row">
+        <a class="btn-quiet v-file" href="https://github.com/MeshBench/meshbench/releases/latest/download/meshbench-linux-x86_64-bundled.tar.gz"
+           data-bundled="meshbench-linux-x86_64-bundled.tar.gz|118 MB"
+           data-compact="meshbench-linux-x86_64-compact.tar.gz|26 MB">Download
+          <span class="fn"></span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Windows -->
+  <div class="os-panel hidden" data-os="windows">
+    <div class="method">
+      <div class="method-head"><h3>Installer</h3><span class="chip pass">Recommended</span></div>
+      <p class="note">Adds a Start menu entry, upgrades in place, and appears in Apps and Features.</p>
+      <div class="file-row">
+        <a class="btn-quiet v-file" href="https://github.com/MeshBench/meshbench/releases/latest/download/meshbench-windows-x86_64-bundled.msi"
+           data-bundled="meshbench-windows-x86_64-bundled.msi|121 MB"
+           data-compact="meshbench-windows-x86_64-compact.msi|29 MB">Download
+          <span class="fn"></span></a>
+      </div>
+    </div>
+
+    <div class="method">
+      <div class="method-head"><h3>Zip</h3></div>
+      <p class="note">For a memory stick, a build agent, or anywhere an installer is unwanted.</p>
+      <div class="file-row">
+        <a class="btn-quiet v-file" href="https://github.com/MeshBench/meshbench/releases/latest/download/meshbench-windows-x86_64-bundled.zip"
+           data-bundled="meshbench-windows-x86_64-bundled.zip|120 MB"
+           data-compact="meshbench-windows-x86_64-compact.zip|28 MB">Download
+          <span class="fn"></span></a>
+        <span class="chip warn" id="win-compact-chip" hidden>Setup cannot fetch the emulators on Windows yet</span>
+      </div>
+      <div class="callout" id="win-compact-note" hidden>
+        <strong>The compact Windows build cannot finish itself yet.</strong>
+        Emulated boards do run on Windows, but Setup cannot download the emulators there.
+        Take the bundled build, or build the forks yourself and point
+        <code style="font-family:var(--mono);font-size:.85em">MESHBENCH_QEMU</code> and
+        <code style="font-family:var(--mono);font-size:.85em">MESHBENCH_RENODE</code> at them.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="verify">
+  <h2>Verifying, and older versions</h2>
+  <p class="intro">
+    Every asset is listed in <a href="https://github.com/MeshBench/meshbench/releases/latest/download/SHA256SUMS">SHA256SUMS</a>, published beside them.
+  </p>
+  <div class="cmd" style="margin-top:1rem">
+    <code id="verify-cmd">sha256sum -c SHA256SUMS --ignore-missing</code>
+    <button type="button" data-copy="#verify-cmd">Copy</button>
+  </div>
+  <p class="intro" style="margin-top:1.25rem">
+    This page always offers the current release. A run is meant to be reproducible, so if
+    you need the build somebody else used, every previous release is on the
+    <a href="https://github.com/MeshBench/meshbench/releases">releases page</a>.
+  </p>
+</section>
+
+<footer>
+  Source is <a href="https://github.com/MeshBench/meshbench">MeshBench/meshbench</a>, GPL-3.0-or-later. The emulators are our own
+  forks of QEMU and Renode, and the chip model is
+  <a href="https://github.com/MeshBench/virtual-sx1262">virtual-sx1262</a>, MIT. Terrain, board images and firmware are downloaded on
+  first use and cached.
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var BASE = "https://github.com/MeshBench/meshbench/releases/latest/download/";
+  var variant = "bundled";
+  /* Filled from the release API when it answers; until then every size on the
+   * page is the one it shipped with, which reads slightly stale rather than
+   * empty. */
+  var SIZES = {};
+
+  function sizeOf(name, fallback) {
+    var b = SIZES[name];
+    if (!b) { return fallback; }
+    return (b / (1024 * 1024)).toFixed(0) + " MB";
+  }
+
+  /* ---- OS detection. A guess, never a gate: every tab stays one click away. */
+  function guessOS() {
+    var s = (navigator.userAgent || "") + " " + (navigator.platform || "");
+    if (/Win/i.test(s)) return "windows";
+    if (/Mac|iPhone|iPad/i.test(s)) return "macos";
+    if (/Linux|Android|X11/i.test(s)) return "linux";
+    return "linux";
+  }
+
+  var HERO = {
+    macos: {
+      label: "Download for macOS",
+      bundled: ["MeshBench-arm64-bundled.dmg", "118 MB"],
+      compact: ["MeshBench-arm64-compact.dmg", "26 MB"],
+      note: "Apple silicon, macOS 12+.",
+      altTitle: "Or install with one command",
+      alt: {
+        bundled: "curl -fsSL https://meshbench.github.io/install.sh | sh -s -- --bundled",
+        compact: "curl -fsSL https://meshbench.github.io/install.sh | sh"
+      }
+    },
+    linux: {
+      label: "Download for Linux",
+      bundled: ["meshbench-linux-x86_64-bundled.tar.gz", "118 MB"],
+      compact: ["meshbench-linux-x86_64-compact.tar.gz", "26 MB"],
+      note: "x86-64. Also available as an AppImage and a .deb.",
+      altTitle: "Or install with one command",
+      alt: {
+        bundled: "curl -fsSL https://meshbench.github.io/install.sh | sh -s -- --bundled",
+        compact: "curl -fsSL https://meshbench.github.io/install.sh | sh"
+      }
+    },
+    windows: {
+      label: "Download for Windows",
+      bundled: ["meshbench-windows-x86_64-bundled.msi", "121 MB"],
+      compact: ["meshbench-windows-x86_64-compact.msi", "29 MB"],
+      note: "x86-64, Windows 10 or later.",
+      altTitle: "Or take the zip",
+      alt: { bundled: "meshbench-windows-x86_64-bundled.zip", compact: "meshbench-windows-x86_64-compact.zip" }
+    }
+  };
+
+  var os = guessOS();
+
+  function el(sel) { return document.querySelector(sel); }
+  function all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  function paint() {
+    /* hero */
+    var h = HERO[os], f = h[variant];
+    el("#hero-label").textContent = h.label;
+    el("#hero-file").textContent = f[0] + " · " + sizeOf(f[0], f[1]);
+    el("#hero-btn").href = BASE + f[0];
+    el("#alt-note").innerHTML = os === "windows"
+      ? "The same build as the installer, without the installer."
+      : "Works out your distribution, adds our repository or tap, and installs "
+        + (variant === "bundled" ? "<strong>meshbench-bundled</strong>" : "<strong>meshbench</strong>")
+        + " through it, so updates arrive with the rest of your system. "
+        + "<a href=\"#all\">Read the script</a>, or "
+        + "<a href=\"#all\">do it by hand</a>.";
+    el("#hero-note").textContent = h.note + (variant === "bundled"
+      ? " Includes the emulators, so an emulated board boots on first run."
+      : " The application alone; Setup fetches the emulators when you want them.");
+    el("#alt-title").textContent = h.altTitle;
+    el("#alt-cmd").textContent = h.alt[variant];
+
+    /* the switch's own caption */
+    el("#variant-word").textContent = variant;
+    el("#variant-why").textContent = variant === "bundled"
+      ? "Everything included. Nothing to fetch on first run."
+      : "The application alone, about a quarter of the size.";
+    el("#card-bundled").classList.toggle("on", variant === "bundled");
+    el("#card-compact").classList.toggle("on", variant === "compact");
+
+    /* every download link and command on the page */
+    all(".v-file").forEach(function (a) {
+      var parts = a.getAttribute("data-" + variant).split("|");
+      a.href = BASE + parts[0];
+      a.querySelector(".fn").textContent = parts[0] + " · " + sizeOf(parts[0], parts[1]);
+    });
+    all(".v-cmd").forEach(function (c) {
+      c.textContent = c.getAttribute("data-" + variant);
+    });
+    all(".v-pkg").forEach(function (c) {
+      c.textContent = variant === "bundled" ? "meshbench-bundled" : "meshbench";
+    });
+
+    /* the honest bits: only shown when they apply */
+    var compact = variant === "compact";
+    ["mac-compact-chip", "mac-compact-note", "win-compact-chip", "win-compact-note"]
+      .forEach(function (id) { el("#" + id).hidden = !compact; });
+
+    /* tabs */
+    all('.tabs button').forEach(function (b) {
+      b.setAttribute("aria-selected", String(b.dataset.os === os));
+    });
+    all(".os-panel").forEach(function (p) {
+      p.classList.toggle("hidden", p.dataset.os !== os);
+    });
+  }
+
+  all(".tabs button").forEach(function (b) {
+    b.addEventListener("click", function () { os = b.dataset.os; paint(); });
+  });
+  all(".seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      variant = b.dataset.variant;
+      all(".seg button").forEach(function (o) {
+        o.setAttribute("aria-pressed", String(o.dataset.variant === variant));
+      });
+      paint();
+    });
+  });
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-copy]");
+    if (!btn) return;
+    var target = btn.getAttribute("data-copy");
+    var node = target === "prev" ? btn.previousElementSibling : el(target);
+    if (!node) return;
+    var text = node.textContent;
+    if (navigator.clipboard) { navigator.clipboard.writeText(text).catch(function () {}); }
+    var was = btn.textContent;
+    btn.textContent = "Copied";
+    setTimeout(function () { btn.textContent = was; }, 1200);
+  });
+
+  el("#det-" + os).textContent = "· detected";
+  paint();
+
+  /* The version, the date and the real byte sizes, fetched once.
+   *
+   * Deliberately an enhancement rather than the mechanism. Every button is a
+   * plain link to releases/latest/download/<name>, which GitHub resolves
+   * server-side, so the page works with this turned off, with JavaScript
+   * disabled, and forever. The anonymous API is 60 requests an hour per IP,
+   * shared with everything else that address does against GitHub - fine for one
+   * visitor and not fine for an office behind one NAT, and that failure would
+   * land on exactly the page whose job is to work for somebody who has never
+   * seen this project. So it fills in cosmetics and nothing else.
+   */
+  fetch("https://api.github.com/repos/MeshBench/meshbench/releases/latest")
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (rel) {
+      if (!rel) { return; }
+      if (rel.tag_name) { el("#ver").textContent = rel.tag_name; }
+      if (rel.published_at) {
+        var d = new Date(rel.published_at);
+        el("#released").textContent = d.toLocaleDateString(undefined,
+          { day: "numeric", month: "long", year: "numeric" });
+      }
+      var size = {};
+      (rel.assets || []).forEach(function (a) { size[a.name] = a.size; });
+      SIZES = size;
+      paint();
+    })
+    .catch(function () { /* the fallbacks are already on the page */ });
+})();
+</script>
+
+</body>
+</html>
