@@ -95,7 +95,11 @@
   .page { padding-bottom: 5rem; }
   .page h1, .page h2, .page h3 { font-family: var(--display); font-weight: 700;
                                  text-wrap: balance; margin: 0; }
-  .page a { color: var(--relay); }
+  /* Not a blanket rule: scoping this to .page put it at (0,1,1), which
+     outranks .btn-signal at (0,1,0), and the orange button's label turned
+     violet. Excluded rather than out-specified, so a button added later
+     does not have to know to fight it. */
+  .page a:not([class*="btn-"]) { color: var(--relay); }
 
   /* The masthead is styles.css's own; only the current-page mark is ours. */
   .masthead nav a[aria-current="page"] { color: #F2EFF9; font-weight: 600; }
