@@ -290,20 +290,26 @@
           <tr><td class="mono">Generic_E22_sx1262</td><td>ESP32</td><td>QEMU</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
           <tr><td class="mono">Heltec_t114</td><td>nRF52840</td><td>Renode</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
           <tr><td class="mono">Heltec_t096</td><td>nRF52840</td><td>Renode</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
-          <tr><td class="mono">Heltec_v3</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
-          <tr><td class="mono">Xiao_S3_WIO</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
-          <tr><td class="mono">RAK_4631</td><td>nRF52840</td><td>Renode</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
-          <tr><td class="mono">Xiao_nrf52</td><td>nRF52840</td><td>Renode</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
-          <tr><td class="mono">Heltec_mesh_solar</td><td>nRF52840</td><td>Renode</td><td><span class="pill hears">boots, transmits, hears — does not forward</span></td></tr>
-          <tr><td class="mono">Station_G2</td><td>ESP32-S3</td><td>—</td><td><span class="pill none">no emulation wiring recorded yet</span></td></tr>
-          <tr><td class="mono">Heltec_v2</td><td>ESP32</td><td>—</td><td><span class="pill none">carries an SX1276, which is not modelled</span></td></tr>
+          <tr><td class="mono">RAK_4631</td><td>nRF52840</td><td>Renode</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Xiao_nrf52</td><td>nRF52840</td><td>Renode</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Heltec_mesh_solar</td><td>nRF52840</td><td>Renode</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Heltec_v3</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">LilyGo_TDeck</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Ebyte_EoRa-S3</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill relays">forwards, and answers after an idle</span></td></tr>
+          <tr><td class="mono">Xiao_S3_WIO</td><td>ESP32-S3</td><td>QEMU</td><td><span class="pill relays">forwards; idle behaviour not measurable yet</span></td></tr>
+          <tr><td class="mono">Station_G2</td><td>ESP32-S3</td><td>&mdash;</td><td><span class="pill none">no emulation wiring recorded yet</span></td></tr>
+          <tr><td class="mono">Heltec_v2</td><td>ESP32</td><td>&mdash;</td><td><span class="pill none">carries an SX1276, which is not modelled</span></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="legend">The boards that do not forward report their channel busy for essentially the
-    whole run — 241 seconds of 250 on one measurement, against zero on a board that relays — and
-    MeshCore will not transmit into a busy channel. Not the wiring, not the budget, not the seed,
-    not the geometry.</p>
+    <p class="legend">Forwarding is the row worth reading: it means the board took somebody
+    else's packet off the air and put it back on, judged at the board itself, which is what
+    separates a member of a mesh from a node that talks to itself. Measured one board at a time
+    on an idle machine, on 4 September 2026 &mdash; several emulators at once make a twelve-core
+    machine fall behind the wall clock, and a board running late looks exactly like a board that
+    is broken. The two boards with no emulator have never been attempted rather than tried and
+    failed. <a href="https://meshbench.github.io/docs/emulation.html#which-boards-have-been-run">The
+    full matrix</a> has a column per capability.</p>
   </div>
 </section>
 
