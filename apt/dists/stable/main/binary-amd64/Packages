@@ -1,5 +1,25 @@
 Package: meshbench-bundled
 Architecture: amd64
+Version: 0.0.10
+Priority: optional
+Section: science
+Maintainer: MeshBench <noreply@github.com>
+Provides: meshbench
+Depends: libc6 (>= 2.34), libgl1, libx11-6, libxkbcommon0, libwayland-client0, libvulkan1
+Conflicts: meshbench
+Replaces: meshbench
+Filename: pool/main/m/meshbench/meshbench-bundled_0.0.10_amd64.deb
+Size: 92885558
+MD5sum: 890bdc071448f49f08d688317a387711
+SHA1: cec225d0816c3d2a2166c20c8b80b15f0f6e9fcf
+SHA256: 7867d8c62a38bfd40951fd721ba158d51a2a8d2b36eb85a870acea542f4dc25e
+SHA512: fb8e8ae29fb57e27a121d161ae1b7b99887aeb51761545957c58114f3e947f038902b269ad95633dd1288838d29a74145ab176d75bd870d40b2dd218bd447ff2
+Description: Plan and test MeshCore LoRa networks against real firmware
+ MeshBench runs real MeshCore firmware against a sample-accurate LoRa
+ channel over real terrain, and says what arrived at the antenna and why.
+
+Package: meshbench-bundled
+Architecture: amd64
 Version: 0.0.6
 Priority: optional
 Section: science
@@ -74,6 +94,24 @@ MD5sum: 64c1a31b2960d34efae761e32c53d288
 SHA1: a14362ca712f0710e76ce5864c387f01529f6d0b
 SHA256: c6082cef2b0cb8d7129b3c0b1dcbfe4277e341560f6641772b0a333e27cbe7ab
 SHA512: cbdb811b8420a942cee83514dcfca55fe8268c5cfe9cd1488257519fb2298bc11b0b70df259c23e944b303d1302125f701f12ed50e4362b2d679155ab24c6bfe
+Description: Plan and test MeshCore LoRa networks against real firmware
+ MeshBench runs real MeshCore firmware against a sample-accurate LoRa
+ channel over real terrain, and says what arrived at the antenna and why.
+
+Package: meshbench
+Architecture: amd64
+Version: 0.0.10
+Priority: optional
+Section: science
+Maintainer: MeshBench <noreply@github.com>
+Depends: libc6 (>= 2.34), libgl1, libx11-6, libxkbcommon0, libwayland-client0, libvulkan1
+Conflicts: meshbench-bundled
+Filename: pool/main/m/meshbench/meshbench_0.0.10_amd64.deb
+Size: 25905484
+MD5sum: 6e56aaece15e6bf80bb33266968407be
+SHA1: e37e80c0c98bd9b313d6438bc06dd715068d3e06
+SHA256: 5a93007e0eeb2688cb49b46e2b2a38853c9102731d1ef24fbfd47bad4bf9f959
+SHA512: 8f9ebf7726d9e47697be5f6e740e71abcdd44a939c18e5ad6bef071523cb9434c15b5c8ba6c788f0fd6e047788c5cd0da082e919eeb1c4169dfbf287a04c5bbc
 Description: Plan and test MeshCore LoRa networks against real firmware
  MeshBench runs real MeshCore firmware against a sample-accurate LoRa
  channel over real terrain, and says what arrived at the antenna and why.
