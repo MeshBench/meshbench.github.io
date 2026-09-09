@@ -1,14 +1,25 @@
 #!/bin/sh
 #
-# MeshBench, installed through your package manager.
+# MeshBench, installed the way this machine expects.
 #
 #   curl -fsSL https://meshbench.github.io/install.sh | sh
 #   curl -fsSL https://meshbench.github.io/install.sh | sh -s -- --bundled
 #
-# It works out the distribution, adds our repository or tap, and then runs apt
-# or brew. It installs *through* the package manager rather than instead of it,
-# so updates keep arriving with the rest of the system and MeshBench does not
-# acquire a third install path nobody maintains.
+# It works out the distribution and installs the right way for it:
+#
+#   Debian, Ubuntu   adds our apt repository and installs through apt, so
+#                    updates arrive with the rest of the system.
+#   macOS            adds our Homebrew tap and installs the cask.
+#   Arch family      no package manager repository yet, so it installs the
+#                    release tarball into /opt/meshbench, puts meshbench on
+#                    PATH, and adds a launcher entry. Re-running upgrades it in
+#                    place; the last section here says how to remove it.
+#
+# Where a package manager repository exists it is used, rather than instead of
+# it, so MeshBench does not acquire a second install path on a machine that has
+# a maintained one. The tarball install is only for the distributions that have
+# no repository, and it stays a single, self-describing directory precisely so
+# it is not a mess nobody can find later.
 #
 # Two packages, and the difference is only whether the emulators travel with
 # the application:
@@ -122,9 +133,106 @@ install_debian() {
   say "Installed. Run 'meshbench workbench', or find MeshBench in the applications menu."
 }
 
+# For a distribution we publish no repository for, but whose glibc is current
+# enough to run the Linux build: fetch the release tarball, verify it, and put
+# it where an installed application lives. The tarball is a self-contained tree
+# - the binary finds its fixtures, fonts and chip model beside itself - so it
+# installs flat into one directory and reaches PATH through a single symlink.
+# os.Executable resolves that symlink to the real file, so resource discovery
+# lands in /opt/meshbench exactly as it would from the unpacked tarball.
+PREFIX=/opt/meshbench
+BINLINK=/usr/local/bin/meshbench
+DESKTOP=/usr/share/applications/io.github.meshbench.meshbench.desktop
+ICON=/usr/share/icons/hicolor/256x256/apps/io.github.meshbench.meshbench.png
+RELEASE=https://github.com/MeshBench/meshbench/releases/latest/download
+RAW=https://raw.githubusercontent.com/MeshBench/meshbench/main/packaging
+
+install_tarball() {
+  need curl "curl is needed to download the release"
+  need tar "tar is needed to unpack the release"
+  need sha256sum "sha256sum is needed to verify the download. Install coreutils."
+
+  arch=$(uname -m)
+  case "$arch" in
+    x86_64|amd64) ;;
+    *) die "the Linux build is x86_64 only, and this machine is $arch.
+Take a build from https://meshbench.github.io/download." ;;
+  esac
+
+  asset="meshbench-linux-x86_64-${VARIANT}.tar.gz"
+
+  if [ -n "$DRY" ]; then
+    say "Would install the $VARIANT tarball:"
+    printf '  curl -fL %s/%s -o <tmp>/%s\n' "$RELEASE" "$asset" "$asset" >&2
+    printf '  curl -fL %s/SHA256SUMS | grep %s | sha256sum -c\n' "$RELEASE" "$asset" >&2
+    printf '  %s rm -rf %s && %s tar xzf <tmp>/%s -C /opt (as meshbench/)\n' "$SUDO" "$PREFIX" "$SUDO" "$asset" >&2
+    printf '  %s ln -sf %s/meshbench %s\n' "$SUDO" "$PREFIX" "$BINLINK" >&2
+    printf '  %s install the launcher entry %s and icon %s\n' "$SUDO" "$DESKTOP" "$ICON" >&2
+    return 0
+  fi
+
+  tmp=$(mktemp -d)
+  # set -e means an early failure still has to clean up after itself.
+  trap 'rm -rf "$tmp"' EXIT INT TERM
+
+  say "Downloading ${asset}..."
+  curl -fL --proto '=https' "$RELEASE/$asset" -o "$tmp/$asset" \
+    || die "could not download $asset. Take a build from https://meshbench.github.io/download instead."
+
+  say "Verifying the download..."
+  curl -fsSL "$RELEASE/SHA256SUMS" -o "$tmp/SHA256SUMS" \
+    || die "could not fetch SHA256SUMS to verify the download."
+  # One line, our asset, checked where the file actually is.
+  grep " ${asset}\$" "$tmp/SHA256SUMS" > "$tmp/want.sha256" \
+    || die "SHA256SUMS has no entry for $asset; refusing to install an unverified file."
+  ( cd "$tmp" && sha256sum -c want.sha256 >/dev/null 2>&1 ) \
+    || die "the download did not match its published checksum; refusing to install it."
+
+  say "Installing into ${PREFIX}..."
+  # A clean tree every time: an upgrade, or a swap between compact and bundled,
+  # must not leave an emulator from the last install behind.
+  $SUDO rm -rf "$PREFIX"
+  $SUDO mkdir -p /opt
+  # The tarball unpacks as meshbench/; move it into place under our own name.
+  tar xzf "$tmp/$asset" -C "$tmp"
+  $SUDO mv "$tmp/meshbench" "$PREFIX"
+
+  say "Linking ${BINLINK}..."
+  $SUDO mkdir -p "$(dirname "$BINLINK")"
+  $SUDO ln -sf "$PREFIX/meshbench" "$BINLINK"
+
+  # The launcher entry and its icon are not in the tarball; take them from the
+  # source tree, so the entry matches the one the .deb installs. A desktop
+  # without them still has meshbench on PATH, so this is a warning, not a death.
+  say "Adding the launcher entry..."
+  if curl -fsSL "$RAW/meshbench.desktop" -o "$tmp/meshbench.desktop" \
+     && curl -fsSL "$RAW/icons/meshbench-256.png" -o "$tmp/icon.png"; then
+    $SUDO mkdir -p "$(dirname "$DESKTOP")" "$(dirname "$ICON")"
+    $SUDO cp "$tmp/meshbench.desktop" "$DESKTOP"
+    $SUDO cp "$tmp/icon.png" "$ICON"
+    if command -v update-desktop-database >/dev/null 2>&1; then
+      $SUDO update-desktop-database "$(dirname "$DESKTOP")" >/dev/null 2>&1 || true
+    fi
+    if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+      $SUDO gtk-update-icon-cache -f /usr/share/icons/hicolor >/dev/null 2>&1 || true
+    fi
+  else
+    say "  (could not fetch the launcher entry; meshbench is still on your PATH)"
+  fi
+
+  rm -rf "$tmp"
+  trap - EXIT INT TERM
+  say ""
+  say "Installed $VARIANT into $PREFIX. Run 'meshbench workbench', or find MeshBench in the applications menu."
+  say "There is no package manager entry for it, so it does not update with the"
+  say "system: re-run this script for a new release. To remove it:"
+  say "  $SUDO rm -rf $PREFIX $BINLINK $DESKTOP $ICON"
+}
+
 # What this machine is. Deliberately narrow: a distribution nothing is
-# published for gets sent to the download page rather than a guess, because a
-# wrong guess here is a half-installed machine.
+# published for, and whose glibc floor we cannot vouch for, gets sent to the
+# download page rather than a guess, because a wrong guess here is a
+# half-installed machine.
 case "${UNAME_S:-$(uname -s)}" in
   Darwin)
     install_macos
@@ -140,6 +248,11 @@ case "${UNAME_S:-$(uname -s)}" in
     case "${ID:-}${ID_LIKE:+ $ID_LIKE}" in
       *debian*|*ubuntu*)
         install_debian
+        ;;
+      *arch*)
+        # Arch and its family (CachyOS, Manjaro, EndeavourOS) roll forward, so
+        # their glibc is always above the build's floor.
+        install_tarball
         ;;
       *)
         die "no package is published for ${PRETTY_NAME:-this distribution} yet.
