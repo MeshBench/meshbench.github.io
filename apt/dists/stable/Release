@@ -1,24 +1,24 @@
 Architectures: amd64
 Codename: stable
 Components: main
-Date: Wed, 09 Sep 2026 14:14:25 +0000
+Date: Wed, 14 Oct 2026 19:35:22 +0000
 Description: MeshBench, an RF-accurate MeshCore simulator
 Label: MeshBench
 Origin: MeshBench
 Suite: stable
 MD5Sum:
- 944a9c5fa9c66d880d4a5a08a246f285              200 Release
- 81b8c4519b4e262a0909f51bff9e3238            12104 main/binary-amd64/Packages
- 4cdc5ab4d93862b1839af592f92c946d             3046 main/binary-amd64/Packages.gz
+ 04696bdede143936888f27b2edb89955              200 Release
+ 5f7c23d31f90349311af8a795a92fd05            13832 main/binary-amd64/Packages
+ 5b671eaabeda2dfbdeaa1a1bc60d6157             3411 main/binary-amd64/Packages.gz
 SHA1:
- 70c0fe9106620b5215b8f297e3671675a1e91554              200 Release
- 14bf65c5f3c7be3e7b11b2e98335fd546ce0e8a1            12104 main/binary-amd64/Packages
- da0c6f3b6ae2b507d77be3a92d9264bc6c03aa1a             3046 main/binary-amd64/Packages.gz
+ c3c0f1fb9b317b5d2adbbbd10fdcc2aa6ed86a09              200 Release
+ 69aefe453689d04fe30cbb1a8d672143d08696d5            13832 main/binary-amd64/Packages
+ 7fb9ac66f0b1c1b02459d17f2ad36fa826c6eac7             3411 main/binary-amd64/Packages.gz
 SHA256:
- 557e1e38c1848c82ec2b874fde0dfcdb639d73b7f41af146c2767e2a16d393ba              200 Release
- 8dff6c2ec45f08407774cc26578d4590ea9e6e35485a9572464e68347de6d675            12104 main/binary-amd64/Packages
- b77ffe95288d73018f9af3fdb1de4e4e3feb769a05bd55ee78d9abd3f93ca29a             3046 main/binary-amd64/Packages.gz
+ d32f0c0f8c16e6ad607274660ec23d5603bf2dcff92a23adf57ac4252c34e285              200 Release
+ 8a8fce68f5c588f1fa1acd8b98bc3c1014f8749676cddf84c768cf32fdb60b5d            13832 main/binary-amd64/Packages
+ 29a8b5069fba9067299cc342dafbff540336ed20badc652eab6dfec197a54fe2             3411 main/binary-amd64/Packages.gz
 SHA512:
- 2ebf79784b995be4cb3573b880c945f70881c7585f2f977b7bbcb2b57ecea7ee9e903876b5779c12aa1767582c9a815977f8894b49dbfe53c8ec15cc938e043c              200 Release
- 1bc63dd992ba769dad8a498b461157752992ded84e4ac0585dbe6fc56776d452240b289f1d91c168ed24d0632b8dc12cc693651315dc695d4b63dcddbef87d86            12104 main/binary-amd64/Packages
- c9ca96c4fd4ea8211c5b499ac0e3b204a738fccc6da0923c583517dce969d64cf7a70ae30ada58d9da5fb39fc2d79d86741b022109c68afe0ba2bb97cc0c93ed             3046 main/binary-amd64/Packages.gz
+ 98aa6c9eaff7495e4143f36307f666058b8e11a51c141c3df38f4307542f1c54d76d35dbc6ae753aa9f37418635e4b801841662808a7285c4f6256c49b42bc2a              200 Release
+ 7d22ae99b795b4c01a04568af22a73e12f4d856725e48a68b56619e5576f4da46dfe5934694c8c4d0f1121686f4bd62fee081ea985b3bb46f804c99ad2595e40            13832 main/binary-amd64/Packages
+ 33700d8fb956e47244e5e3060e48377659f13567d8d98ec4ee088c1ce9e6c5b4e6e06dde525ce1101f017db7ed633d99caa94a58e8c03d3048362eb28ca0cecb             3411 main/binary-amd64/Packages.gz
